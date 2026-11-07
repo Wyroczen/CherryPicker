@@ -32,7 +32,7 @@ final class AppMain: NSObject, NSApplicationDelegate {
         }
 
         print("2. Inicjalizacja okna HUD...")
-        let panel = FloatingHUDPanel(contentRect: NSRect(x: 0, y: 0, width: 680, height: 420))
+        let panel = FloatingHUDPanel(contentRect: NSRect(x: 0, y: 0, width: 720, height: 460))
         let contentView = MainHUDView { [weak panel] in
             panel?.hideHUD(restoreFocus: true)
         }
