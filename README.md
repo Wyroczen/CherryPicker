@@ -6,11 +6,14 @@ Ultralekki, natywny launcher aplikacji i menedżer okien dla systemu macOS, napi
 
 ## Funkcjonalności
 
-### 1. Nowoczesny Wygląd Liquid Glass
+### 1. Nowoczesny Wygląd Liquid Glass & Architektura Pływającego Szkła
 - **Materiały szklane macOS (Liquid Glass)**: Półprzezroczyste tło `NSVisualEffectView` z miękkim gradientem zwierciadlanym (specular highlight) o grubości 1px.
 - **Organiczne zaokrąglenia**: Łagodne krawędzie głównego panelu HUD z promieniem 26px (`continuous style`).
-- **Bezszwowy pasek wyszukiwania**: Pole tekstowe idealnie scalone z górną częścią okna, bez zbędnych ramek i separatorów.
-- **Subtelny pasek akcji**: Dyskretny pasek dolny ze statusem bieżącego zaznaczenia oraz czytelnym keycapem `↵ Wykonaj`.
+- **Pływające szkło o wysokiej gęstości (Full-Bleed Floating Glass)**: Lista wyników rozciąga się pod spodem na pełną wysokość okna, eliminując jakiekolwiek sztuczne linie podziału czy pasy na środku okna.
+- **Łagodna rampa krycia (Soft Entry Ramp)**:
+  - W strefie wpisywania tekstu obowiązuje pełne 90% krycia i głębokie rozmycie, dzięki czemu tekst wyszukiwarki jest w 100% czytelny, a przewijane wiersze stają się niewidoczne w tle.
+  - Pomiędzy polem tekstowym a listą zastosowano łagodną rampę (płynny wzrost krycia z 0% do 90%), dzięki czemu elementy miękko wsuwają się pod nagłówek bez nagłego skoku optycznego.
+- **Subtelny pasek akcji**: Dyskretna pływająca stopka ze statusem bieżącego zaznaczenia oraz czytelnym keycapem `↵ Wykonaj`.
 
 ### 2. Dynamiczne Ikony Podglądu Okna (Window Preview Icons)
 - Zamiast statycznych, niedokładnych symboli, każde polecenie zmiany geometrii posiada dedykowaną, wektorową miniaturę monitora (`WindowPreviewIcon`):

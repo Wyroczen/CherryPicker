@@ -11,26 +11,33 @@ public struct MainHUDView: View {
     @State private var selectedIndex = 0
     @State private var keyMonitor: Any?
 
+    // Geometria nagłówka i stopki pływającego szkła
+    private let headerTextHeight: CGFloat = 52
+    private let headerRampHeight: CGFloat = 22
+    private let footerActionHeight: CGFloat = 36
+    private let footerRampHeight: CGFloat = 18
+
     public init(onClose: @escaping () -> Void) {
         self.onClose = onClose
     }
 
     public var body: some View {
-        VStack(spacing: 0) {
-            // Pasek wyszukiwania zintegrowany bezpośrednio z tłem Liquid Glass
-            searchBarHeader
-
-            // Zunifikowana lista wyników (Aplikacje, Polecenia okien, Pliki)
+        ZStack(alignment: .top) {
+            // 1. Pełnowymiarowa lista (Full-Bleed) rozciągająca się na całą wysokość okna
             resultsList
 
-            // Dolny pasek akcji (Action Bar ze statusem i skrótami)
+            // 2. Pływający nagłówek wyszukiwarki (Floating Glass Header) z łagodną rampą krycia
+            searchBarHeader
+
+            // 3. Pływająca stopka akcji (Floating Glass Footer) z łagodną rampą krycia
             actionBarFooter
+                .frame(maxHeight: .infinity, alignment: .bottom)
         }
         .frame(width: 700, height: 460)
         .background(
             ZStack {
                 VisualEffectBlur(material: .hudWindow, blendingMode: .behindWindow, cornerRadius: 26)
-                Color(red: 20/255, green: 22/255, blue: 28/255).opacity(0.42)
+                Color(red: 18/255, green: 20/255, blue: 26/255).opacity(0.40)
             }
         )
         .clipShape(RoundedRectangle(cornerRadius: 26, style: .continuous))
@@ -62,36 +69,72 @@ public struct MainHUDView: View {
     // MARK: - Subviews
 
     private var searchBarHeader: some View {
-        HStack(spacing: 14) {
-            Image(systemName: "magnifyingglass")
-                .font(.system(size: 19, weight: .medium))
-                .foregroundColor(.white.opacity(0.55))
+        VStack(spacing: 0) {
+            HStack(spacing: 14) {
+                Image(systemName: "magnifyingglass")
+                    .font(.system(size: 19, weight: .medium))
+                    .foregroundColor(.white.opacity(0.55))
 
-            TextField("Szukaj aplikacji, plików lub poleceń okien...", text: $searchText)
-                .textFieldStyle(.plain)
-                .font(.system(size: 17, weight: .regular))
-                .foregroundColor(.white)
-                .onSubmit {
-                    if let item = selectedItem {
-                        executeSelection(item: item)
+                TextField("Szukaj aplikacji, plików lub poleceń okien...", text: $searchText)
+                    .textFieldStyle(.plain)
+                    .font(.system(size: 17, weight: .regular))
+                    .foregroundColor(.white)
+                    .onSubmit {
+                        if let item = selectedItem {
+                            executeSelection(item: item)
+                        }
                     }
-                }
-                .onChange(of: searchText) { newValue in
-                    updateSearch(query: newValue)
-                }
+                    .onChange(of: searchText) { newValue in
+                        updateSearch(query: newValue)
+                    }
 
-            if !searchText.isEmpty {
-                Button(action: { searchText = "" }) {
-                    Image(systemName: "xmark.circle.fill")
-                        .font(.system(size: 15))
-                        .foregroundColor(.white.opacity(0.5))
+                if !searchText.isEmpty {
+                    Button(action: { searchText = "" }) {
+                        Image(systemName: "xmark.circle.fill")
+                            .font(.system(size: 15))
+                            .foregroundColor(.white.opacity(0.5))
+                    }
+                    .buttonStyle(.plain)
                 }
-                .buttonStyle(.plain)
             }
+            .padding(.horizontal, 22)
+            .padding(.top, 18)
+            .padding(.bottom, 12)
+            .contentShape(Rectangle())
+
+            // Łagodna rampa pod polem tekstowym (Soft Ramp) – nie przechwytuje kliknięć
+            Spacer()
+                .frame(height: headerRampHeight)
+                .allowsHitTesting(false)
         }
-        .padding(.horizontal, 22)
-        .padding(.top, 18)
-        .padding(.bottom, 14)
+        .background(
+            ZStack {
+                VisualEffectBlur(material: .hudWindow, blendingMode: .behindWindow, cornerRadius: 0)
+                Color(red: 18/255, green: 20/255, blue: 26/255).opacity(0.90)
+            }
+        )
+        .mask(
+            VStack(spacing: 0) {
+                // Strefa pola tekstowego: 100% maski -> równe 90% krycia tła
+                Rectangle()
+                    .fill(Color.black)
+                    .frame(height: headerTextHeight)
+
+                // Łagodna rampa wejściowa: spadek z 90% do 0%
+                LinearGradient(
+                    stops: [
+                        .init(color: .black, location: 0.0),
+                        .init(color: .black.opacity(0.85), location: 0.30),
+                        .init(color: .black.opacity(0.48), location: 0.62),
+                        .init(color: .black.opacity(0.12), location: 0.88),
+                        .init(color: .clear, location: 1.0)
+                    ],
+                    startPoint: .top,
+                    endPoint: .bottom
+                )
+                .frame(height: headerRampHeight)
+            }
+        )
     }
 
     private var resultsList: some View {
@@ -102,9 +145,11 @@ public struct MainHUDView: View {
                         resultRow(item: item, index: index)
                     }
                 }
+                .padding(.top, headerTextHeight + headerRampHeight + 2)
+                .padding(.bottom, footerActionHeight + footerRampHeight + 2)
                 .padding(.horizontal, 12)
-                .padding(.vertical, 6)
             }
+            .scrollIndicators(.hidden)
             .onChange(of: selectedIndex) { newIndex in
                 if filteredResults.indices.contains(newIndex) {
                     withAnimation(.easeInOut(duration: 0.1)) {
@@ -175,47 +220,83 @@ public struct MainHUDView: View {
     }
 
     private var actionBarFooter: some View {
-        HStack(spacing: 12) {
-            if let selected = selectedItem {
-                HStack(spacing: 6) {
-                    Text(actionDescription(for: selected.kind))
-                        .font(.system(size: 11, weight: .regular))
-                        .foregroundColor(.white.opacity(0.48))
-                    Text(selected.title)
-                        .font(.system(size: 11, weight: .semibold))
-                        .foregroundColor(.white.opacity(0.88))
-                        .lineLimit(1)
-                }
-            } else {
-                Text("Brak wyników")
-                    .font(.system(size: 11))
-                    .foregroundColor(.white.opacity(0.45))
-            }
-
+        VStack(spacing: 0) {
+            // Łagodna rampa wejściowa nad stopką – nie przechwytuje kliknięć
             Spacer()
+                .frame(height: footerRampHeight)
+                .allowsHitTesting(false)
 
-            // Dyskretny keycap akcji
-            HStack(spacing: 6) {
-                Text("↵")
-                    .font(.system(size: 10, weight: .bold))
-                    .foregroundColor(.white.opacity(0.85))
-                    .padding(.horizontal, 6)
-                    .padding(.vertical, 2.5)
-                    .background(Color.white.opacity(0.12))
-                    .clipShape(RoundedRectangle(cornerRadius: 4, style: .continuous))
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 4, style: .continuous)
-                            .stroke(Color.white.opacity(0.14), lineWidth: 0.5)
-                    )
+            HStack(spacing: 12) {
+                if let selected = selectedItem {
+                    HStack(spacing: 6) {
+                        Text(actionDescription(for: selected.kind))
+                            .font(.system(size: 11, weight: .regular))
+                            .foregroundColor(.white.opacity(0.48))
+                        Text(selected.title)
+                            .font(.system(size: 11, weight: .semibold))
+                            .foregroundColor(.white.opacity(0.88))
+                            .lineLimit(1)
+                    }
+                } else {
+                    Text("Brak wyników")
+                        .font(.system(size: 11))
+                        .foregroundColor(.white.opacity(0.45))
+                }
 
-                Text("Wykonaj")
-                    .font(.system(size: 11, weight: .medium))
-                    .foregroundColor(.white.opacity(0.6))
+                Spacer()
+
+                // Dyskretny keycap akcji
+                HStack(spacing: 6) {
+                    Text("↵")
+                        .font(.system(size: 10, weight: .bold))
+                        .foregroundColor(.white.opacity(0.85))
+                        .padding(.horizontal, 6)
+                        .padding(.vertical, 2.5)
+                        .background(Color.white.opacity(0.12))
+                        .clipShape(RoundedRectangle(cornerRadius: 4, style: .continuous))
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 4, style: .continuous)
+                                .stroke(Color.white.opacity(0.14), lineWidth: 0.5)
+                        )
+
+                    Text("Wykonaj")
+                        .font(.system(size: 11, weight: .medium))
+                        .foregroundColor(.white.opacity(0.6))
+                }
             }
+            .padding(.horizontal, 20)
+            .padding(.bottom, 12)
+            .padding(.top, 4)
+            .contentShape(Rectangle())
         }
-        .padding(.horizontal, 20)
-        .padding(.vertical, 11)
-        .background(Color.black.opacity(0.18))
+        .background(
+            ZStack {
+                VisualEffectBlur(material: .hudWindow, blendingMode: .behindWindow, cornerRadius: 0)
+                Color(red: 15/255, green: 17/255, blue: 23/255).opacity(0.90)
+            }
+        )
+        .mask(
+            VStack(spacing: 0) {
+                // Łagodna rampa wejściowa: spadek z 0% do 90%
+                LinearGradient(
+                    stops: [
+                        .init(color: .clear, location: 0.0),
+                        .init(color: .black.opacity(0.12), location: 0.12),
+                        .init(color: .black.opacity(0.48), location: 0.38),
+                        .init(color: .black.opacity(0.85), location: 0.70),
+                        .init(color: .black, location: 1.0)
+                    ],
+                    startPoint: .top,
+                    endPoint: .bottom
+                )
+                .frame(height: footerRampHeight)
+
+                // Strefa przycisków akcji: 100% maski -> pełne 90% krycia tła
+                Rectangle()
+                    .fill(Color.black)
+                    .frame(height: footerActionHeight)
+            }
+        )
     }
 
     private var selectedItem: SearchItem? {
