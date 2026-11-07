@@ -6,7 +6,19 @@ Ultralekki, natywny launcher aplikacji i menedżer okien dla systemu macOS, napi
 
 ## Funkcjonalności
 
-### 1. Zarządzanie Oknami (Window Management)
+### 1. Nowoczesny Wygląd Liquid Glass
+- **Materiały szklane macOS (Liquid Glass)**: Półprzezroczyste tło `NSVisualEffectView` z miękkim gradientem zwierciadlanym (specular highlight) o grubości 1px.
+- **Organiczne zaokrąglenia**: Łagodne krawędzie głównego panelu HUD z promieniem 26px (`continuous style`).
+- **Bezszwowy pasek wyszukiwania**: Pole tekstowe idealnie scalone z górną częścią okna, bez zbędnych ramek i separatorów.
+- **Subtelny pasek akcji**: Dyskretny pasek dolny ze statusem bieżącego zaznaczenia oraz czytelnym keycapem `↵ Wykonaj`.
+
+### 2. Dynamiczne Ikony Podglądu Okna (Window Preview Icons)
+- Zamiast statycznych, niedokładnych symboli, każde polecenie zmiany geometrii posiada dedykowaną, wektorową miniaturę monitora (`WindowPreviewIcon`):
+  - Błękitny gradient ekranu macOS (`#38bdf8` -> `#2563eb`).
+  - Ciemna matryca z precyzyjnie wyliczonym białym oknem, odpowiadającym rzeczywistemu ułamkowi i położeniu na ekranie (`0.0 ... 1.0`).
+  - Pełne odwzorowanie dla wszystkich 47 dostępnych układów.
+
+### 3. Zarządzanie Oknami (Window Management)
 - Natychmiastowe skalowanie i przesuwanie aktywnego okna z obsługą ponad 40 geometrii:
   - **Połówki**: Lewa (`Left Half`), Prawa (`Right Half`), Górna (`Top Half`), Dolna (`Bottom Half`), Środkowa (`Center Half`).
   - **Jedna trzecia (1/3)**: `First Third`, `Center Third`, `Last Third`, `Top Third`, `Middle Third`, `Bottom Third`.
@@ -18,7 +30,7 @@ Ultralekki, natywny launcher aplikacji i menedżer okien dla systemu macOS, napi
 - **Odwrócenie osi współrzędnych**: Dokładna konwersja ramki roboczej z Cocoa (`NSScreen.visibleFrame`, punkt (0,0) na dole) do układu Accessibility (punkt (0,0) na górze), omijając pasek menu i Dock.
 - **Sekwencja trójkroku**: Zastosowanie `Pozycja -> Rozmiar -> Pozycja` eliminuje błędy blokowania geometrii przez WindowServer na krawędziach wyświetlacza.
 
-### 2. Zunifikowana Wyszukiwarka (Spotlight & Polecenia)
+### 4. Zunifikowana Wyszukiwarka (Spotlight & Polecenia)
 - **Polecenia okien w głównej liście**: Sterowanie oknami jest pełnoprawnym elementem listy wyszukiwania (oznaczonym etykietą `Polecenie`).
 - Wyszukiwanie z obsługą polskich i angielskich aliasów (np. *"lewo"*, *"left"*, *"trzecia"*, *"third"*, *"max"*, *"ćwiartka"*).
 - **Podsystem zapytań CoreServices `MDQuery`**: Wywołanie synchroniczne `MDQueryCreate` z predykatem `kMDItemContentTypeTree == 'com.apple.application-bundle'`.
@@ -27,7 +39,7 @@ Ultralekki, natywny launcher aplikacji i menedżer okien dla systemu macOS, napi
 - Sortowanie według daty ostatniego otwarcia (`kMDItemLastUsedDate` / MRU).
 - Wyszukiwanie plików systemowych w czasie rzeczywistym w tle.
 
-### 3. Pływający Panel HUD
+### 5. Pływający Panel HUD
 - Działa jako proces pomocniczy (`.accessory` / odpowiednik `LSUIElement = true`) – brak ikony w Docku i `Cmd+Tab`.
 - Klasa `NSPanel` z `.nonactivatingPanel`, `level = .floating` oraz `.canJoinAllSpaces, .fullScreenAuxiliary`.
 - **Śledzenie historii aktywacji (`FrontmostAppTracker`)**: Inteligentne przywracanie fokusu do właściwej docelowej aplikacji przed zmianą geometrii okna.
