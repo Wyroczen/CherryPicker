@@ -23,18 +23,34 @@ public final class FloatingHUDPanel: NSPanel {
     public override var canBecomeKey: Bool { true }
     public override var canBecomeMain: Bool { true }
 
+    public func showHUD() {
+        center()
+        makeKeyAndOrderFront(nil)
+        NSApp.activate(ignoringOtherApps: true)
+    }
+
+    public func hideHUD(restoreFocus: Bool = true) {
+        orderOut(nil)
+        if restoreFocus {
+            FrontmostAppTracker.shared.bringTargetAppToFront()
+        }
+    }
+
     public func toggleVisibility() {
         if isVisible {
-            orderOut(nil)
+            hideHUD()
         } else {
-            center()
-            makeKeyAndOrderFront(nil)
-            NSApp.activate(ignoringOtherApps: true)
+            showHUD()
         }
+    }
+
+    public override func resignKey() {
+        super.resignKey()
+        hideHUD(restoreFocus: false)
     }
 
     public override func cancelOperation(_ sender: Any?) {
         // Obsługa naciśnięcia klawisza ESC
-        orderOut(nil)
+        hideHUD(restoreFocus: true)
     }
 }
