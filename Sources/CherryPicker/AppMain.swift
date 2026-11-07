@@ -20,6 +20,9 @@ final class AppMain: NSObject, NSApplicationDelegate {
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         print("=== CherryPicker Uruchomiony ===")
+        // Start śledzenia aktywnej aplikacji
+        _ = FrontmostAppTracker.shared
+
         print("1. Sprawdzanie uprawnień Dostępności (Accessibility)...")
         let trusted = WindowManager.shared.isAccessibilityGranted(prompt: true)
         if !trusted {
@@ -31,7 +34,7 @@ final class AppMain: NSObject, NSApplicationDelegate {
         print("2. Inicjalizacja okna HUD...")
         let panel = FloatingHUDPanel(contentRect: NSRect(x: 0, y: 0, width: 680, height: 420))
         let contentView = MainHUDView { [weak panel] in
-            panel?.orderOut(nil)
+            panel?.hideHUD(restoreFocus: true)
         }
         panel.contentView = NSHostingView(rootView: contentView)
         panel.center()
