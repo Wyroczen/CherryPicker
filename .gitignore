@@ -19,3 +19,5 @@ Package.resolved
 # App & Binary artifacts
 *.app
 *.dSYM
+*.dmg
+dmg_staging/

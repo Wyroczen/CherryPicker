@@ -29,6 +29,9 @@ public final class FloatingHUDPanel: NSPanel {
         center()
         makeKeyAndOrderFront(nil)
         NSApp.activate(ignoringOtherApps: true)
+        if let contentView = self.contentView {
+            makeFirstResponder(contentView)
+        }
     }
 
     public func hideHUD(restoreFocus: Bool = true) {
