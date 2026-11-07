@@ -17,122 +17,39 @@ public struct MainHUDView: View {
 
     public var body: some View {
         VStack(spacing: 0) {
-            // Pasek wyszukiwania
-            HStack(spacing: 12) {
-                Image(systemName: "magnifyingglass")
-                    .font(.system(size: 18))
-                    .foregroundColor(.secondary)
-
-                TextField("Szukaj aplikacji, plików lub poleceń okien...", text: $searchText)
-                    .textFieldStyle(.plain)
-                    .font(.system(size: 16, weight: .medium))
-                    .onSubmit {
-                        if let item = selectedItem {
-                            executeSelection(item: item)
-                        }
-                    }
-                    .onChange(of: searchText) { newValue in
-                        updateSearch(query: newValue)
-                    }
-
-                if !searchText.isEmpty {
-                    Button(action: { searchText = "" }) {
-                        Image(systemName: "xmark.circle.fill")
-                            .foregroundColor(.secondary)
-                    }
-                    .buttonStyle(.plain)
-                }
-            }
-            .padding(.horizontal, 16)
-            .padding(.vertical, 14)
-            .background(Color(NSColor.controlBackgroundColor).opacity(0.8))
-
-            Divider()
+            // Pasek wyszukiwania zintegrowany bezpośrednio z tłem Liquid Glass
+            searchBarHeader
 
             // Zunifikowana lista wyników (Aplikacje, Polecenia okien, Pliki)
-            ScrollViewReader { proxy in
-                List(Array(filteredResults.enumerated()), id: \.element.id) { index, item in
-                    HStack(spacing: 12) {
-                        // Ikona elementu
-                        leadingIcon(for: item)
-
-                        // Tytuł i ścieżka / opis
-                        VStack(alignment: .leading, spacing: 2) {
-                            Text(item.title)
-                                .font(.system(size: 14, weight: .medium))
-                                .foregroundColor(selectedIndex == index ? .primary : .primary.opacity(0.9))
-
-                            Text(item.subtitle)
-                                .font(.system(size: 11))
-                                .foregroundColor(.secondary)
-                                .lineLimit(1)
-                        }
-
-                        Spacer()
-
-                        // Etykieta rodzaju (Aplikacja / Polecenie / Plik)
-                        Text(item.kind.badgeText)
-                            .font(.system(size: 10, weight: .bold))
-                            .padding(.horizontal, 7)
-                            .padding(.vertical, 3)
-                            .background(badgeBackground(for: item.kind, isSelected: selectedIndex == index))
-                            .cornerRadius(4)
-                    }
-                    .padding(.vertical, 4)
-                    .padding(.horizontal, 8)
-                    .background(selectedIndex == index ? Color.accentColor.opacity(0.25) : Color.clear)
-                    .cornerRadius(6)
-                    .contentShape(Rectangle())
-                    .onTapGesture {
-                        executeSelection(item: item)
-                    }
-                }
-                .listStyle(.plain)
-                .onChange(of: selectedIndex) { newIndex in
-                    if filteredResults.indices.contains(newIndex) {
-                        proxy.scrollTo(filteredResults[newIndex].id, anchor: .center)
-                    }
-                }
-            }
-
-            Divider()
+            resultsList
 
             // Dolny pasek akcji (Action Bar ze statusem i skrótami)
-            HStack(spacing: 12) {
-                if let selected = selectedItem {
-                    HStack(spacing: 6) {
-                        Text(actionDescription(for: selected.kind))
-                            .font(.system(size: 11, weight: .medium))
-                            .foregroundColor(.secondary)
-                        Text(selected.title)
-                            .font(.system(size: 11, weight: .bold))
-                            .foregroundColor(.primary)
-                            .lineLimit(1)
-                    }
-                } else {
-                    Text("Brak wyników")
-                        .font(.system(size: 11))
-                        .foregroundColor(.secondary)
-                }
-
-                Spacer()
-
-                HStack(spacing: 8) {
-                    keyBadge("↵", label: "Wykonaj")
-                    keyBadge("ESC", label: "Zamknij")
-                }
-            }
-            .padding(.horizontal, 16)
-            .padding(.vertical, 10)
-            .background(Color(NSColor.windowBackgroundColor).opacity(0.95))
+            actionBarFooter
         }
-        .frame(width: 720, height: 460)
-        .background(VisualEffectBlur(material: .hudWindow, blendingMode: .behindWindow))
-        .cornerRadius(12)
-        .overlay(
-            RoundedRectangle(cornerRadius: 12)
-                .stroke(Color.white.opacity(0.15), lineWidth: 1)
+        .frame(width: 700, height: 460)
+        .background(
+            ZStack {
+                VisualEffectBlur(material: .hudWindow, blendingMode: .behindWindow, cornerRadius: 26)
+                Color(red: 20/255, green: 22/255, blue: 28/255).opacity(0.42)
+            }
         )
+        .clipShape(RoundedRectangle(cornerRadius: 26, style: .continuous))
+        .overlay(
+            RoundedRectangle(cornerRadius: 26, style: .continuous)
+                .stroke(
+                    LinearGradient(
+                        colors: [
+                            Color.white.opacity(0.18),
+                            Color.white.opacity(0.06),
+                            Color.clear
+                        ],
+                        startPoint: .top,
+                        endPoint: .bottom
+                    ),
+                    lineWidth: 1
+                )
+        )
+        .shadow(color: Color.black.opacity(0.45), radius: 32, x: 0, y: 16)
         .onAppear {
             loadInitialData()
             setupKeyboardMonitor()
@@ -140,6 +57,165 @@ public struct MainHUDView: View {
         .onDisappear {
             removeKeyboardMonitor()
         }
+    }
+
+    // MARK: - Subviews
+
+    private var searchBarHeader: some View {
+        HStack(spacing: 14) {
+            Image(systemName: "magnifyingglass")
+                .font(.system(size: 19, weight: .medium))
+                .foregroundColor(.white.opacity(0.55))
+
+            TextField("Szukaj aplikacji, plików lub poleceń okien...", text: $searchText)
+                .textFieldStyle(.plain)
+                .font(.system(size: 17, weight: .regular))
+                .foregroundColor(.white)
+                .onSubmit {
+                    if let item = selectedItem {
+                        executeSelection(item: item)
+                    }
+                }
+                .onChange(of: searchText) { newValue in
+                    updateSearch(query: newValue)
+                }
+
+            if !searchText.isEmpty {
+                Button(action: { searchText = "" }) {
+                    Image(systemName: "xmark.circle.fill")
+                        .font(.system(size: 15))
+                        .foregroundColor(.white.opacity(0.5))
+                }
+                .buttonStyle(.plain)
+            }
+        }
+        .padding(.horizontal, 22)
+        .padding(.top, 18)
+        .padding(.bottom, 14)
+    }
+
+    private var resultsList: some View {
+        ScrollViewReader { proxy in
+            ScrollView {
+                LazyVStack(spacing: 3) {
+                    ForEach(Array(filteredResults.enumerated()), id: \.element.id) { index, item in
+                        resultRow(item: item, index: index)
+                    }
+                }
+                .padding(.horizontal, 12)
+                .padding(.vertical, 6)
+            }
+            .onChange(of: selectedIndex) { newIndex in
+                if filteredResults.indices.contains(newIndex) {
+                    withAnimation(.easeInOut(duration: 0.1)) {
+                        proxy.scrollTo(filteredResults[newIndex].id, anchor: .center)
+                    }
+                }
+            }
+        }
+    }
+
+    private func resultRow(item: SearchItem, index: Int) -> some View {
+        let isSelected = selectedIndex == index
+
+        return HStack(spacing: 12) {
+            // Ikona elementu
+            leadingIcon(for: item)
+
+            // Tytuł i ścieżka / opis
+            VStack(alignment: .leading, spacing: 2) {
+                Text(item.title)
+                    .font(.system(size: 13.5, weight: isSelected ? .semibold : .medium))
+                    .foregroundColor(isSelected ? .white : .white.opacity(0.92))
+
+                Text(item.subtitle)
+                    .font(.system(size: 11))
+                    .foregroundColor(isSelected ? .white.opacity(0.7) : .white.opacity(0.45))
+                    .lineLimit(1)
+            }
+
+            Spacer()
+
+            // Etykieta rodzaju (Aplikacja / Polecenie / Plik)
+            Text(item.kind.badgeText)
+                .font(.system(size: 10, weight: .semibold))
+                .foregroundColor(isSelected ? .white.opacity(0.9) : .white.opacity(0.65))
+                .padding(.horizontal, 8)
+                .padding(.vertical, 3)
+                .background(Color.white.opacity(isSelected ? 0.16 : 0.08))
+                .clipShape(RoundedRectangle(cornerRadius: 6, style: .continuous))
+        }
+        .padding(.vertical, 6)
+        .padding(.horizontal, 10)
+        .background(
+            Group {
+                if isSelected {
+                    LinearGradient(
+                        colors: [
+                            Color.accentColor.opacity(0.32),
+                            Color.accentColor.opacity(0.20)
+                        ],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    )
+                    .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 12, style: .continuous)
+                            .stroke(Color.white.opacity(0.12), lineWidth: 0.5)
+                    )
+                } else {
+                    Color.clear
+                }
+            }
+        )
+        .contentShape(Rectangle())
+        .onTapGesture {
+            executeSelection(item: item)
+        }
+    }
+
+    private var actionBarFooter: some View {
+        HStack(spacing: 12) {
+            if let selected = selectedItem {
+                HStack(spacing: 6) {
+                    Text(actionDescription(for: selected.kind))
+                        .font(.system(size: 11, weight: .regular))
+                        .foregroundColor(.white.opacity(0.48))
+                    Text(selected.title)
+                        .font(.system(size: 11, weight: .semibold))
+                        .foregroundColor(.white.opacity(0.88))
+                        .lineLimit(1)
+                }
+            } else {
+                Text("Brak wyników")
+                    .font(.system(size: 11))
+                    .foregroundColor(.white.opacity(0.45))
+            }
+
+            Spacer()
+
+            // Dyskretny keycap akcji
+            HStack(spacing: 6) {
+                Text("↵")
+                    .font(.system(size: 10, weight: .bold))
+                    .foregroundColor(.white.opacity(0.85))
+                    .padding(.horizontal, 6)
+                    .padding(.vertical, 2.5)
+                    .background(Color.white.opacity(0.12))
+                    .clipShape(RoundedRectangle(cornerRadius: 4, style: .continuous))
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 4, style: .continuous)
+                            .stroke(Color.white.opacity(0.14), lineWidth: 0.5)
+                    )
+
+                Text("Wykonaj")
+                    .font(.system(size: 11, weight: .medium))
+                    .foregroundColor(.white.opacity(0.6))
+            }
+        }
+        .padding(.horizontal, 20)
+        .padding(.vertical, 11)
+        .background(Color.black.opacity(0.18))
     }
 
     private var selectedItem: SearchItem? {
@@ -158,25 +234,7 @@ public struct MainHUDView: View {
                 .frame(width: 26, height: 26)
 
         case .windowCommand(let action):
-            ZStack {
-                RoundedRectangle(cornerRadius: 6)
-                    .fill(Color.accentColor.opacity(0.18))
-                Image(systemName: action.iconName)
-                    .font(.system(size: 13, weight: .semibold))
-                    .foregroundColor(.accentColor)
-            }
-            .frame(width: 26, height: 26)
-        }
-    }
-
-    private func badgeBackground(for kind: SearchItemKind, isSelected: Bool) -> Color {
-        switch kind {
-        case .windowCommand:
-            return Color.accentColor.opacity(isSelected ? 0.35 : 0.2)
-        case .application:
-            return Color.secondary.opacity(isSelected ? 0.35 : 0.2)
-        case .file:
-            return Color.secondary.opacity(isSelected ? 0.3 : 0.15)
+            WindowPreviewIcon(action: action, size: 28)
         }
     }
 
@@ -185,20 +243,6 @@ public struct MainHUDView: View {
         case .windowCommand: return "Zastosuj układ:"
         case .application: return "Uruchom aplikację:"
         case .file: return "Otwórz plik:"
-        }
-    }
-
-    private func keyBadge(_ key: String, label: String) -> some View {
-        HStack(spacing: 4) {
-            Text(key)
-                .font(.system(size: 10, weight: .bold))
-                .padding(.horizontal, 5)
-                .padding(.vertical, 2)
-                .background(Color.secondary.opacity(0.2))
-                .cornerRadius(4)
-            Text(label)
-                .font(.system(size: 11))
-                .foregroundColor(.secondary)
         }
     }
 
@@ -226,7 +270,7 @@ public struct MainHUDView: View {
             return
         }
 
-        // Asynchroniczne wyszukiwanie w tle, aby zapobiec blokowaniu NSTableView i zachować płynność
+        // Asynchroniczne wyszukiwanie w tle, aby zapobiec blokowaniu UI i zachować płynność
         DispatchQueue.global(qos: .userInteractive).async {
             let matchedCommands = self.allWindowCommands.filter { $0.matches(query: trimmed) }
             let matchedApps = self.allApps.filter { $0.matches(query: trimmed) }
@@ -284,10 +328,16 @@ public struct MainHUDView: View {
 public struct VisualEffectBlur: NSViewRepresentable {
     public var material: NSVisualEffectView.Material
     public var blendingMode: NSVisualEffectView.BlendingMode
+    public var cornerRadius: CGFloat
 
-    public init(material: NSVisualEffectView.Material, blendingMode: NSVisualEffectView.BlendingMode) {
+    public init(
+        material: NSVisualEffectView.Material = .hudWindow,
+        blendingMode: NSVisualEffectView.BlendingMode = .behindWindow,
+        cornerRadius: CGFloat = 26
+    ) {
         self.material = material
         self.blendingMode = blendingMode
+        self.cornerRadius = cornerRadius
     }
 
     public func makeNSView(context: Context) -> NSVisualEffectView {
@@ -295,8 +345,15 @@ public struct VisualEffectBlur: NSViewRepresentable {
         view.material = material
         view.blendingMode = blendingMode
         view.state = .active
+        view.wantsLayer = true
+        view.layer?.cornerRadius = cornerRadius
+        view.layer?.masksToBounds = true
         return view
     }
 
-    public func updateNSView(_ nsView: NSVisualEffectView, context: Context) {}
+    public func updateNSView(_ nsView: NSVisualEffectView, context: Context) {
+        nsView.material = material
+        nsView.blendingMode = blendingMode
+        nsView.layer?.cornerRadius = cornerRadius
+    }
 }
