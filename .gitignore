@@ -1,8 +1,10 @@
-# macOS
+# macOS system files
 .DS_Store
 */.DS_Store
 .AppleDouble
 .LSOverride
+Icon?
+._*
 
 # Xcode / Apple development
 build/
@@ -19,3 +21,30 @@ Package.resolved
 # App & Binary artifacts
 *.app
 *.dSYM
+*.dmg
+*.pkg
+*.iso
+dmg_staging/
+
+# Archives & Packages
+*.zip
+*.tar
+*.tar.gz
+*.tgz
+*.7z
+*.rar
+
+# Documents & Research files (zapobiega przypadkowemu commitowi PDFów i notatek)
+*.pdf
+*.docx
+*.odt
+*.rtf
+
+# Temporary, debug & log files
+*.log
+*.tmp
+*.bak
+tmp/
+temp/
+scratch/
+.env*
