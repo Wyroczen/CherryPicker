@@ -145,7 +145,7 @@ public struct MainHUDView: View {
     private func windowButton(_ title: String, icon: String, action: @escaping () -> Void) -> some View {
         Button(action: {
             onClose()
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
                 action()
             }
         }) {
@@ -163,19 +163,34 @@ public struct MainHUDView: View {
     }
 
     private func updateSearch(query: String) {
-        if query.trimmingCharacters(in: .whitespaces).isEmpty {
-            filteredResults = allApps
-        } else {
-            let matchedApps = allApps.filter { $0.name.localizedCaseInsensitiveContains(query) }
-            let fileResults = SpotlightSearcher.shared.searchFiles(queryText: query, limit: 15)
-            filteredResults = matchedApps + fileResults
+        let trimmed = query.trimmingCharacters(in: .whitespaces)
+        if trimmed.isEmpty {
+            DispatchQueue.main.async {
+                self.filteredResults = self.allApps
+                self.selectedIndex = 0
+            }
+            return
         }
-        selectedIndex = 0
+
+        // Asynchroniczne wyszukiwanie w tle, aby zapobiec blokowaniu NSTableView i błędom reentrant
+        DispatchQueue.global(qos: .userInteractive).async {
+            let matchedApps = self.allApps.filter { $0.name.localizedCaseInsensitiveContains(trimmed) }
+            let fileResults = SpotlightSearcher.shared.searchFiles(queryText: trimmed, limit: 15)
+            let combined = matchedApps + fileResults
+
+            DispatchQueue.main.async {
+                guard self.searchText.trimmingCharacters(in: .whitespaces) == trimmed else { return }
+                self.filteredResults = combined
+                self.selectedIndex = 0
+            }
+        }
     }
 
     private func executeSelection(item: SearchResultItem) {
         onClose()
-        NSWorkspace.shared.open(URL(fileURLWithPath: item.path))
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
+            NSWorkspace.shared.open(URL(fileURLWithPath: item.path))
+        }
     }
 }
 
