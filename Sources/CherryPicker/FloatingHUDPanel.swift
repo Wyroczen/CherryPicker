@@ -15,6 +15,8 @@ public final class FloatingHUDPanel: NSPanel {
         self.backgroundColor = .clear
         self.hasShadow = true
         self.isMovableByWindowBackground = true
+        self.titleVisibility = .hidden
+        self.titlebarAppearsTransparent = true
 
         // Okno widoczne na wszystkich wirtualnych pulpitach (Spaces) i nad pełnym ekranem
         self.collectionBehavior = [.canJoinAllSpaces, .fullScreenAuxiliary, .transient]
