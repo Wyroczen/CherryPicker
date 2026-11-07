@@ -7,27 +7,32 @@ Ultralekki, natywny launcher aplikacji i menedżer okien dla systemu macOS, napi
 ## Funkcjonalności
 
 ### 1. Zarządzanie Oknami (Window Management)
-- Natychmiastowe skalowanie i przesuwanie aktywnego okna:
-  - **Połówki**: Lewa (`Left Half`), Prawa (`Right Half`), Górna (`Top Half`), Dolna (`Bottom Half`)
-  - **Maksymalizacja**: `Maximize` (pełne dopasowanie bez tworzenia nowego macOS Space)
-  - **Centrowanie**: `Center`
-  - **Ćwiartki**: 4 narożniki ekranu
+- Natychmiastowe skalowanie i przesuwanie aktywnego okna z obsługą ponad 40 geometrii:
+  - **Połówki**: Lewa (`Left Half`), Prawa (`Right Half`), Górna (`Top Half`), Dolna (`Bottom Half`), Środkowa (`Center Half`).
+  - **Jedna trzecia (1/3)**: `First Third`, `Center Third`, `Last Third`, `Top Third`, `Middle Third`, `Bottom Third`.
+  - **Dwie trzecie (2/3)**: `First Two Thirds`, `Center Two Thirds`, `Last Two Thirds`, `Top Two Thirds`, `Bottom Two Thirds`, `Top/Bottom Center Two Thirds`.
+  - **Ćwiartki i Trzy czwarte (1/4 & 3/4)**: 4 narożne ćwiartki, 4 pionowe kolumny, 4 poziome pasy oraz układy 75% szerokości/wysokości.
+  - **Szóstki (1/6)**: Siatka 3 kolumny x 2 rzędy (`Top/Bottom Left, Center, Right Sixth`).
+  - **Maksymalizacja i Skalowanie**: `Maximize` (100%), `Almost Maximize` (90%), `Maximize Height`, `Maximize Width`, `Reasonable Size` (60%, max 1024x900) oraz `Center`.
 - **Obejście dla aplikacji Electron/Chromium**: Automatyczne tymczasowe wyłączanie `AXEnhancedUserInterface`, zapobiegające zamrażaniu manipulacji oknem w aplikacjach takich jak Slack, Discord czy VS Code.
 - **Odwrócenie osi współrzędnych**: Dokładna konwersja ramki roboczej z Cocoa (`NSScreen.visibleFrame`, punkt (0,0) na dole) do układu Accessibility (punkt (0,0) na górze), omijając pasek menu i Dock.
 - **Sekwencja trójkroku**: Zastosowanie `Pozycja -> Rozmiar -> Pozycja` eliminuje błędy blokowania geometrii przez WindowServer na krawędziach wyświetlacza.
 
-### 2. Wyszukiwanie Aplikacji i Plików (Spotlight Search)
+### 2. Zunifikowana Wyszukiwarka (Spotlight & Polecenia)
+- **Polecenia okien w głównej liście**: Sterowanie oknami jest pełnoprawnym elementem listy wyszukiwania (oznaczonym etykietą `Polecenie`).
+- Wyszukiwanie z obsługą polskich i angielskich aliasów (np. *"lewo"*, *"left"*, *"trzecia"*, *"third"*, *"max"*, *"ćwiartka"*).
 - **Podsystem zapytań CoreServices `MDQuery`**: Wywołanie synchroniczne `MDQueryCreate` z predykatem `kMDItemContentTypeTree == 'com.apple.application-bundle'`.
 - Błyskawiczny czas odpowiedzi (~2-5 ms) zamiast wolnego przeszukiwania dysku przez `FileManager`.
 - Filtrowanie katalogu `/System/Library/` (eliminacja zbędnych procesów pomocniczych macOS).
 - Sortowanie według daty ostatniego otwarcia (`kMDItemLastUsedDate` / MRU).
-- Wyszukiwanie plików systemowych w czasie rzeczywistym.
+- Wyszukiwanie plików systemowych w czasie rzeczywistym w tle.
 
 ### 3. Pływający Panel HUD
 - Działa jako proces pomocniczy (`.accessory` / odpowiednik `LSUIElement = true`) – brak ikony w Docku i `Cmd+Tab`.
 - Klasa `NSPanel` z `.nonactivatingPanel`, `level = .floating` oraz `.canJoinAllSpaces, .fullScreenAuxiliary`.
-- Globalny skrót: **`Option + Spacja`** (`⌥ + Space`) rejestrowany przez Carbon `RegisterEventHotKey` (brak potrzeby ciągłego podsłuchiwania klawiatury).
-- Zamykanie klawiszem `ESC`.
+- **Śledzenie historii aktywacji (`FrontmostAppTracker`)**: Inteligentne przywracanie fokusu do właściwej docelowej aplikacji przed zmianą geometrii okna.
+- Globalny skrót: **`Option + Spacja`** (`⌥ + Space`) rejestrowany przez Carbon `RegisterEventHotKey`.
+- **Nawigacja strzałkami**: Klawisze `↑` / `↓` płynnie przewijają listę wyników, `Enter` wykonuje akcję, a `ESC` zamyka HUD.
 
 ---
 
