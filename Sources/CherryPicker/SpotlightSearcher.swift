@@ -62,6 +62,22 @@ public final class SpotlightSearcher: @unchecked Sendable {
         return items.sorted { ($0.lastUsedDate ?? .distantPast) > ($1.lastUsedDate ?? .distantPast) }
     }
 
+    /// Pobiera zainstalowane aplikacje jako zunifikowane elementy SearchItem
+    public func getInstalledAppItems() -> [SearchItem] {
+        return getInstalledApplications().map {
+            SearchItem.fromApp(name: $0.name, path: $0.path, lastUsed: $0.lastUsedDate)
+        }
+    }
+
+    /// Wyszukuje pliki jako zunifikowane elementy SearchItem
+    public func searchFileItems(queryText: String, limit: Int = 20) -> [SearchItem] {
+        return searchFiles(queryText: queryText, limit: limit).map {
+            $0.isApp
+                ? SearchItem.fromApp(name: $0.name, path: $0.path, lastUsed: $0.lastUsedDate)
+                : SearchItem.fromFile(name: $0.name, path: $0.path, lastUsed: $0.lastUsedDate)
+        }
+    }
+
     /// Wyszukiwanie plików po wpisanej frazie
     public func searchFiles(queryText: String, limit: Int = 30) -> [SearchResultItem] {
         guard !queryText.trimmingCharacters(in: .whitespaces).isEmpty else { return [] }

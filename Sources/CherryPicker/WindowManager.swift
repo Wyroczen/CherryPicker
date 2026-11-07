@@ -1,7 +1,7 @@
 import Cocoa
 import ApplicationServices
 
-public enum WindowAction: String, CaseIterable, Identifiable {
+public enum WindowAction: String, CaseIterable, Identifiable, Sendable {
     // Połowy (Halves)
     case leftHalf = "Left Half"
     case rightHalf = "Right Half"
