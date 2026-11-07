@@ -41,12 +41,24 @@ public final class WindowManager {
         return AXIsProcessTrustedWithOptions(options as CFDictionary)
     }
 
-    /// Pobiera okno aplikacji na pierwszym planie
+    /// Pobiera docelową aplikację do manipulacji oknem
+    public func getTargetApplication() -> NSRunningApplication? {
+        if let frontApp = NSWorkspace.shared.frontmostApplication,
+           frontApp.processIdentifier != NSRunningApplication.current.processIdentifier {
+            return frontApp
+        }
+        return FrontmostAppTracker.shared.targetApplication
+    }
+
+    /// Pobiera okno docelowej aplikacji
     public func getFrontmostWindow() -> (element: AXUIElement, pid: pid_t)? {
-        guard let frontApp = NSWorkspace.shared.frontmostApplication else { return nil }
-        let pid = frontApp.processIdentifier
+        guard let targetApp = getTargetApplication() else {
+            return nil
+        }
+        let pid = targetApp.processIdentifier
         let appElement = AXUIElementCreateApplication(pid)
 
+        // 1. Sprawdź okno skupione (Focused Window)
         var focusedWindow: CFTypeRef?
         let status = AXUIElementCopyAttributeValue(appElement, kAXFocusedWindowAttribute as CFString, &focusedWindow)
 
@@ -57,7 +69,18 @@ public final class WindowManager {
             }
         }
 
-        // Fallback do skupionego elementu potomnego w drzewie UI
+        // 2. Fallback: przeszukaj listę okien aplikacji (kAXWindowsAttribute)
+        var windowsRef: CFTypeRef?
+        if AXUIElementCopyAttributeValue(appElement, kAXWindowsAttribute as CFString, &windowsRef) == .success,
+           let windowList = windowsRef as? [AXUIElement] {
+            for win in windowList {
+                if isWindowResizable(win) {
+                    return (win, pid)
+                }
+            }
+        }
+
+        // 3. Fallback do skupionego elementu potomnego w drzewie UI
         let systemWide = AXUIElementCreateSystemWide()
         var focusedUIElement: CFTypeRef?
         if AXUIElementCopyAttributeValue(systemWide, kAXFocusedUIElementAttribute as CFString, &focusedUIElement) == .success,
@@ -102,6 +125,9 @@ public final class WindowManager {
             print("[WindowManager] Brak uprawnień Dostępności (Accessibility).")
             return
         }
+
+        // Upewnij się, że docelowa aplikacja powraca na pierwszy plan
+        FrontmostAppTracker.shared.bringTargetAppToFront()
 
         guard let (window, pid) = getFrontmostWindow(),
               let currentWinRect = getWindowRect(window) else {
