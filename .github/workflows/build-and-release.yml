@@ -1,6 +1,6 @@
 name: Build & Release (Nightly & Stable)
 
-on:
+'on':
   push:
     branches:
       - main
@@ -41,7 +41,6 @@ jobs:
           COMMIT_MSG=$(git log -1 --pretty=%s)
 
           if [[ "${{ github.event_name }}" == "push" && "${{ github.ref_type }}" == "tag" ]]; then
-            # Wydanie oficjalne ze znacznika (tag vX.Y.Z)
             VERSION="${GITHUB_REF_NAME#v}"
             TAG_NAME="${GITHUB_REF_NAME}"
             RELEASE_NAME="CherryPicker ${TAG_NAME}"
@@ -49,7 +48,6 @@ jobs:
             DMG_NAME="CherryPicker-${VERSION}-arm64.dmg"
             echo "Oficjalne stabilne wydanie CherryPicker ${TAG_NAME}." > release_body.md
           elif [[ "${{ github.event_name }}" == "workflow_dispatch" && "${{ github.event.inputs.release_type }}" == "stable" ]]; then
-            # Ręczne wydanie stabilne
             VERSION="${{ github.event.inputs.version }}"
             TAG_NAME="v${VERSION}"
             RELEASE_NAME="CherryPicker ${TAG_NAME}"
@@ -57,30 +55,16 @@ jobs:
             DMG_NAME="CherryPicker-${VERSION}-arm64.dmg"
             echo "Oficjalne wydanie CherryPicker ${TAG_NAME}." > release_body.md
           else
-            # Wydanie Nightly (push na main lub ręczne nightly)
             VERSION="nightly-${SHORT_SHA}"
             TAG_NAME="nightly"
             RELEASE_NAME="CherryPicker (Nightly Build - ${SHORT_SHA})"
             IS_PRERELEASE="true"
             DMG_NAME="CherryPicker-nightly-arm64.dmg"
 
-            cat << EOF > release_body.md
-### 🍒 CherryPicker Nightly Build (${SHORT_SHA})
-Automatyczny build deweloperski z najnowszego stanu gałęzi \`main\`.
-
-* **Ostatni commit:** ${COMMIT_MSG} (\`${SHORT_SHA}\`)
-* **Architektura:** Apple Silicon (\`arm64\`)
-
-#### Jak zainstalować:
-1. Pobierz plik \`${DMG_NAME}\` poniżej.
-2. Otwórz pobrany obraz DMG i przeciągnij **CherryPicker** do folderu **Applications**.
-3. Przy pierwszym uruchomieniu system macOS wyświetli ostrzeżenie Gatekeepera (ponieważ aplikacja jest darmowym projektem open-source bez płatnego certyfikatu deweloperskiego Apple):
-   - Wejdź w **Ustawienia systemowe -> Prywatność i bezpieczeństwo**, przewiń na dół i kliknij **Otwórz mimo to**.
-   - Albo uruchom w Terminalu:
-     \`\`\`bash
-     xattr -cr /Applications/CherryPicker.app
-     \`\`\`
-EOF
+            sed -e "s/__SHORT_SHA__/${SHORT_SHA}/g" \
+                -e "s/__COMMIT_MSG__/${COMMIT_MSG//\//\\/}/g" \
+                -e "s/__DMG_NAME__/${DMG_NAME}/g" \
+                scripts/nightly_body_template.md > release_body.md
           fi
 
           echo "version=${VERSION}" >> $GITHUB_OUTPUT
