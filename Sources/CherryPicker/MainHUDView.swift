@@ -10,6 +10,7 @@ public struct MainHUDView: View {
     @State private var filteredResults: [SearchItem] = []
     @State private var selectedIndex = 0
     @State private var keyMonitor: Any?
+    @FocusState private var isSearchFocused: Bool
 
     // Geometria nagłówka i stopki pływającego szkła
     private let headerTextHeight: CGFloat = 52
@@ -60,6 +61,14 @@ public struct MainHUDView: View {
         .onAppear {
             loadInitialData()
             setupKeyboardMonitor()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.08) {
+                isSearchFocused = true
+            }
+        }
+        .onReceive(NotificationCenter.default.publisher(for: NSWindow.didBecomeKeyNotification)) { _ in
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
+                isSearchFocused = true
+            }
         }
         .onDisappear {
             removeKeyboardMonitor()
@@ -76,6 +85,7 @@ public struct MainHUDView: View {
                     .foregroundColor(.white.opacity(0.55))
 
                 TextField("Szukaj aplikacji, plików lub poleceń okien...", text: $searchText)
+                    .focused($isSearchFocused)
                     .textFieldStyle(.plain)
                     .font(.system(size: 17, weight: .regular))
                     .foregroundColor(.white)
