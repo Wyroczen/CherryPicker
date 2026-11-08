@@ -36,7 +36,7 @@ public struct MainHUDView: View {
         .background(
             ZStack {
                 VisualEffectBlur(material: .hudWindow, blendingMode: .behindWindow, cornerRadius: 26)
-                Color(red: 18/255, green: 20/255, blue: 26/255).opacity(0.38)
+                Color(red: 18/255, green: 20/255, blue: 26/255).opacity(0.48)
             }
         )
         .clipShape(RoundedRectangle(cornerRadius: 26, style: .continuous))
@@ -105,17 +105,7 @@ public struct MainHUDView: View {
         }
         .padding(.horizontal, 22)
         .frame(height: headerHeight)
-        .background(
-            LinearGradient(
-                colors: [
-                    Color(red: 16/255, green: 18/255, blue: 25/255).opacity(0.50),
-                    Color(red: 16/255, green: 18/255, blue: 25/255).opacity(0.20),
-                    Color.clear
-                ],
-                startPoint: .top,
-                endPoint: .bottom
-            )
-        )
+        .background(Color.clear)
     }
 
     private var resultsList: some View {
@@ -245,17 +235,7 @@ public struct MainHUDView: View {
         }
         .padding(.horizontal, 20)
         .frame(height: footerHeight)
-        .background(
-            LinearGradient(
-                colors: [
-                    Color.clear,
-                    Color(red: 15/255, green: 17/255, blue: 23/255).opacity(0.20),
-                    Color(red: 15/255, green: 17/255, blue: 23/255).opacity(0.45)
-                ],
-                startPoint: .top,
-                endPoint: .bottom
-            )
-        )
+        .background(Color.clear)
     }
 
     private var selectedItem: SearchItem? {
@@ -392,6 +372,7 @@ public struct VisualEffectBlur: NSViewRepresentable {
         view.state = .active
         view.wantsLayer = true
         view.layer?.cornerRadius = cornerRadius
+        view.layer?.cornerCurve = .continuous
         view.layer?.masksToBounds = true
         return view
     }
@@ -400,5 +381,7 @@ public struct VisualEffectBlur: NSViewRepresentable {
         nsView.material = material
         nsView.blendingMode = blendingMode
         nsView.layer?.cornerRadius = cornerRadius
+        nsView.layer?.cornerCurve = .continuous
+        nsView.layer?.masksToBounds = true
     }
 }
