@@ -37,13 +37,41 @@ else
     exit 1
 fi
 
-# Jeśli istnieje ikona AppIcon.icns, skopiuj ją
-if [ -f "AppIcon.icns" ]; then
+# Kompilacja katalogu zasobów (Asset Catalog) dla natywnego wsparcia ikon macOS
+if command -v xcrun >/dev/null 2>&1 && xcrun --find actool >/dev/null 2>&1 && [ -d "Assets.xcassets" ]; then
+    echo "Kompilacja Assets.xcassets za pomocą actool..."
+    xcrun actool Assets.xcassets \
+        --compile "${APP_BUNDLE}/Contents/Resources" \
+        --platform macosx \
+        --app-icon AppIcon \
+        --minimum-deployment-target 13.0 \
+        --output-partial-info-plist /tmp/actool_partial.plist \
+        --output-format human-readable-text >/dev/null 2>&1 || true
+fi
+
+# Fallback: jeśli Assets.car lub AppIcon.icns nie zostały wygenerowane przez actool, skopiuj istniejące
+if [ -f "Assets.car" ] && [ ! -f "${APP_BUNDLE}/Contents/Resources/Assets.car" ]; then
+    cp Assets.car "${APP_BUNDLE}/Contents/Resources/"
+fi
+
+if [ -f "AppIcon.icns" ] && [ ! -f "${APP_BUNDLE}/Contents/Resources/AppIcon.icns" ]; then
     cp AppIcon.icns "${APP_BUNDLE}/Contents/Resources/"
 fi
 
-echo "=== [3/5] Podpisywanie ad-hoc (wymagane na Apple Silicon) ==="
-codesign --force --deep -s - "${APP_BUNDLE}"
+echo "=== [3/5] Podpisywanie aplikacji ==="
+# Sprawdzenie dostępnych certyfikatów w Pęku kluczy (np. Apple Development)
+SIGN_IDENTITY=$(security find-identity -p codesigning -v 2>/dev/null | grep -E "Apple Development" | head -n 1 | awk -F '"' '{print $2}' || true)
+if [ -z "${SIGN_IDENTITY}" ]; then
+    SIGN_IDENTITY=$(security find-identity -p codesigning -v 2>/dev/null | grep -E '"[^"]+"' | head -n 1 | awk -F '"' '{print $2}' || true)
+fi
+
+if [ -n "${SIGN_IDENTITY}" ]; then
+    echo "Użyto certyfikatu tożsamości: ${SIGN_IDENTITY}"
+    codesign --force --deep -s "${SIGN_IDENTITY}" "${APP_BUNDLE}"
+else
+    echo "Brak certyfikatu deweloperskiego w Pęku kluczy. Podpisywanie ze stałym Designated Requirement..."
+    codesign --force --deep -s - -r='designated => identifier "com.wyroczen.CherryPicker"' "${APP_BUNDLE}"
+fi
 
 echo "=== [4/5] Przygotowanie zawartości DMG ==="
 DMG_STAGING="dmg_staging"
