@@ -10,6 +10,7 @@ public struct MainHUDView: View {
     @State private var filteredResults: [SearchItem] = []
     @State private var selectedIndex = 0
     @State private var keyMonitor: Any?
+    @FocusState private var isSearchFocused: Bool
 
     // Geometria nagłówka i stopki pływającego szkła
     private let headerTextHeight: CGFloat = 52
@@ -60,6 +61,14 @@ public struct MainHUDView: View {
         .onAppear {
             loadInitialData()
             setupKeyboardMonitor()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.08) {
+                isSearchFocused = true
+            }
+        }
+        .onReceive(NotificationCenter.default.publisher(for: NSWindow.didBecomeKeyNotification)) { _ in
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
+                isSearchFocused = true
+            }
         }
         .onDisappear {
             removeKeyboardMonitor()
@@ -76,6 +85,7 @@ public struct MainHUDView: View {
                     .foregroundColor(.white.opacity(0.55))
 
                 TextField("Szukaj aplikacji, plików lub poleceń okien...", text: $searchText)
+                    .focused($isSearchFocused)
                     .textFieldStyle(.plain)
                     .font(.system(size: 17, weight: .regular))
                     .foregroundColor(.white)
@@ -332,10 +342,13 @@ public struct MainHUDView: View {
             let apps = SpotlightSearcher.shared.getInstalledAppItems()
             let commands = self.allWindowCommands
 
+            var seenIDs = Set<String>()
+            let combined = (apps + commands).filter { seenIDs.insert($0.id).inserted }
+
             DispatchQueue.main.async {
                 self.allApps = apps
                 // Domyślnie prezentujemy najpopularniejsze aplikacje oraz pełny katalog poleceń okien
-                self.filteredResults = apps + commands
+                self.filteredResults = combined
                 self.selectedIndex = 0
             }
         }
@@ -345,7 +358,8 @@ public struct MainHUDView: View {
         let trimmed = query.trimmingCharacters(in: .whitespaces)
         if trimmed.isEmpty {
             DispatchQueue.main.async {
-                self.filteredResults = self.allApps + self.allWindowCommands
+                var seenIDs = Set<String>()
+                self.filteredResults = (self.allApps + self.allWindowCommands).filter { seenIDs.insert($0.id).inserted }
                 self.selectedIndex = 0
             }
             return
@@ -357,8 +371,9 @@ public struct MainHUDView: View {
             let matchedApps = self.allApps.filter { $0.matches(query: trimmed) }
             let fileResults = SpotlightSearcher.shared.searchFileItems(queryText: trimmed, limit: 15)
 
-            // Łączymy: najpierw dopasowane komendy i aplikacje, następnie pliki
-            let combined = matchedCommands + matchedApps + fileResults
+            // Łączymy i deduplikujemy elementy wg unikalnego id, eliminując kolizje tożsamości w SwiftUI ForEach
+            var seenIDs = Set<String>()
+            let combined = (matchedCommands + matchedApps + fileResults).filter { seenIDs.insert($0.id).inserted }
 
             DispatchQueue.main.async {
                 guard self.searchText.trimmingCharacters(in: .whitespaces) == trimmed else { return }
