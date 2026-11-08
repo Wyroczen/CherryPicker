@@ -44,7 +44,16 @@ final class AppMain: NSObject, NSApplicationDelegate {
         registerGlobalHotKey()
 
         // Pokazanie panelu po starcie aplikacji
-        panel.toggleVisibility()
+        panel.showHUD()
+    }
+
+    func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
+        hudPanel?.showHUD()
+        return true
+    }
+
+    func applicationDidBecomeActive(_ notification: Notification) {
+        hudPanel?.showHUD()
     }
 
     private func registerGlobalHotKey() {
