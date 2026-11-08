@@ -13,10 +13,8 @@ public struct MainHUDView: View {
     @FocusState private var isSearchFocused: Bool
 
     // Geometria nagłówka i stopki pływającego szkła
-    private let headerTextHeight: CGFloat = 52
-    private let headerRampHeight: CGFloat = 22
-    private let footerActionHeight: CGFloat = 36
-    private let footerRampHeight: CGFloat = 18
+    private let headerHeight: CGFloat = 52
+    private let footerHeight: CGFloat = 38
 
     public init(onClose: @escaping () -> Void) {
         self.onClose = onClose
@@ -24,13 +22,13 @@ public struct MainHUDView: View {
 
     public var body: some View {
         ZStack(alignment: .top) {
-            // 1. Pełnowymiarowa lista (Full-Bleed) rozciągająca się na całą wysokość okna
+            // 1. Pełnowymiarowa lista (Full-Bleed) rozciągająca się na całą wysokość okna pod nagłówkiem i stopką
             resultsList
 
-            // 2. Pływający nagłówek wyszukiwarki (Floating Glass Header) z łagodną rampą krycia
+            // 2. Pływający nagłówek wyszukiwarki (Floating Glass Header) z subtelnym gradientem
             searchBarHeader
 
-            // 3. Pływająca stopka akcji (Floating Glass Footer) z łagodną rampą krycia
+            // 3. Pływająca stopka akcji (Floating Glass Footer) z subtelnym gradientem
             actionBarFooter
                 .frame(maxHeight: .infinity, alignment: .bottom)
         }
@@ -38,7 +36,7 @@ public struct MainHUDView: View {
         .background(
             ZStack {
                 VisualEffectBlur(material: .hudWindow, blendingMode: .behindWindow, cornerRadius: 26)
-                Color(red: 18/255, green: 20/255, blue: 26/255).opacity(0.40)
+                Color(red: 18/255, green: 20/255, blue: 26/255).opacity(0.48)
             }
         )
         .clipShape(RoundedRectangle(cornerRadius: 26, style: .continuous))
@@ -57,7 +55,6 @@ public struct MainHUDView: View {
                     lineWidth: 1
                 )
         )
-        .shadow(color: Color.black.opacity(0.45), radius: 32, x: 0, y: 16)
         .onAppear {
             loadInitialData()
             setupKeyboardMonitor()
@@ -78,73 +75,37 @@ public struct MainHUDView: View {
     // MARK: - Subviews
 
     private var searchBarHeader: some View {
-        VStack(spacing: 0) {
-            HStack(spacing: 14) {
-                Image(systemName: "magnifyingglass")
-                    .font(.system(size: 19, weight: .medium))
-                    .foregroundColor(.white.opacity(0.55))
+        HStack(spacing: 14) {
+            Image(systemName: "magnifyingglass")
+                .font(.system(size: 19, weight: .medium))
+                .foregroundColor(.white.opacity(0.55))
 
-                TextField("Szukaj aplikacji, plików lub poleceń okien...", text: $searchText)
-                    .focused($isSearchFocused)
-                    .textFieldStyle(.plain)
-                    .font(.system(size: 17, weight: .regular))
-                    .foregroundColor(.white)
-                    .onSubmit {
-                        if let item = selectedItem {
-                            executeSelection(item: item)
-                        }
+            TextField("Szukaj aplikacji, plików lub poleceń okien...", text: $searchText)
+                .focused($isSearchFocused)
+                .textFieldStyle(.plain)
+                .font(.system(size: 17, weight: .regular))
+                .foregroundColor(.white)
+                .onSubmit {
+                    if let item = selectedItem {
+                        executeSelection(item: item)
                     }
-                    .onChange(of: searchText) { newValue in
-                        updateSearch(query: newValue)
-                    }
-
-                if !searchText.isEmpty {
-                    Button(action: { searchText = "" }) {
-                        Image(systemName: "xmark.circle.fill")
-                            .font(.system(size: 15))
-                            .foregroundColor(.white.opacity(0.5))
-                    }
-                    .buttonStyle(.plain)
                 }
-            }
-            .padding(.horizontal, 22)
-            .padding(.top, 18)
-            .padding(.bottom, 12)
-            .contentShape(Rectangle())
+                .onChange(of: searchText) { newValue in
+                    updateSearch(query: newValue)
+                }
 
-            // Łagodna rampa pod polem tekstowym (Soft Ramp) – nie przechwytuje kliknięć
-            Spacer()
-                .frame(height: headerRampHeight)
-                .allowsHitTesting(false)
+            if !searchText.isEmpty {
+                Button(action: { searchText = "" }) {
+                    Image(systemName: "xmark.circle.fill")
+                        .font(.system(size: 15))
+                        .foregroundColor(.white.opacity(0.5))
+                }
+                .buttonStyle(.plain)
+            }
         }
-        .background(
-            ZStack {
-                VisualEffectBlur(material: .hudWindow, blendingMode: .behindWindow, cornerRadius: 0)
-                Color(red: 18/255, green: 20/255, blue: 26/255).opacity(0.90)
-            }
-        )
-        .mask(
-            VStack(spacing: 0) {
-                // Strefa pola tekstowego: 100% maski -> równe 90% krycia tła
-                Rectangle()
-                    .fill(Color.black)
-                    .frame(height: headerTextHeight)
-
-                // Łagodna rampa wejściowa: spadek z 90% do 0%
-                LinearGradient(
-                    stops: [
-                        .init(color: .black, location: 0.0),
-                        .init(color: .black.opacity(0.85), location: 0.30),
-                        .init(color: .black.opacity(0.48), location: 0.62),
-                        .init(color: .black.opacity(0.12), location: 0.88),
-                        .init(color: .clear, location: 1.0)
-                    ],
-                    startPoint: .top,
-                    endPoint: .bottom
-                )
-                .frame(height: headerRampHeight)
-            }
-        )
+        .padding(.horizontal, 22)
+        .frame(height: headerHeight)
+        .background(Color.clear)
     }
 
     private var resultsList: some View {
@@ -155,11 +116,26 @@ public struct MainHUDView: View {
                         resultRow(item: item, index: index)
                     }
                 }
-                .padding(.top, headerTextHeight + headerRampHeight + 2)
-                .padding(.bottom, footerActionHeight + footerRampHeight + 2)
+                .padding(.top, 54)
+                .padding(.bottom, 40)
                 .padding(.horizontal, 12)
             }
             .scrollIndicators(.hidden)
+            .mask(
+                LinearGradient(
+                    stops: [
+                        .init(color: .clear, location: 0.0),
+                        .init(color: .black.opacity(0.18), location: 0.05),
+                        .init(color: .black.opacity(0.40), location: 0.09),
+                        .init(color: .black, location: 0.12),
+                        .init(color: .black, location: 0.88),
+                        .init(color: .black.opacity(0.45), location: 0.94),
+                        .init(color: .clear, location: 1.0)
+                    ],
+                    startPoint: .top,
+                    endPoint: .bottom
+                )
+            )
             .onChange(of: selectedIndex) { newIndex in
                 if filteredResults.indices.contains(newIndex) {
                     withAnimation(.easeInOut(duration: 0.1)) {
@@ -185,7 +161,7 @@ public struct MainHUDView: View {
 
                 Text(item.subtitle)
                     .font(.system(size: 11))
-                    .foregroundColor(isSelected ? .white.opacity(0.7) : .white.opacity(0.45))
+                    .foregroundColor(isSelected ? .white.opacity(0.70) : .white.opacity(0.45))
                     .lineLimit(1)
             }
 
@@ -194,7 +170,7 @@ public struct MainHUDView: View {
             // Etykieta rodzaju (Aplikacja / Polecenie / Plik)
             Text(item.kind.badgeText)
                 .font(.system(size: 10, weight: .semibold))
-                .foregroundColor(isSelected ? .white.opacity(0.9) : .white.opacity(0.65))
+                .foregroundColor(isSelected ? .white.opacity(0.90) : .white.opacity(0.65))
                 .padding(.horizontal, 8)
                 .padding(.vertical, 3)
                 .background(Color.white.opacity(isSelected ? 0.16 : 0.08))
@@ -205,19 +181,8 @@ public struct MainHUDView: View {
         .background(
             Group {
                 if isSelected {
-                    LinearGradient(
-                        colors: [
-                            Color.accentColor.opacity(0.32),
-                            Color.accentColor.opacity(0.20)
-                        ],
-                        startPoint: .topLeading,
-                        endPoint: .bottomTrailing
-                    )
-                    .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 12, style: .continuous)
-                            .stroke(Color.white.opacity(0.12), lineWidth: 0.5)
-                    )
+                    Color.white.opacity(0.11)
+                        .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
                 } else {
                     Color.clear
                 }
@@ -230,83 +195,47 @@ public struct MainHUDView: View {
     }
 
     private var actionBarFooter: some View {
-        VStack(spacing: 0) {
-            // Łagodna rampa wejściowa nad stopką – nie przechwytuje kliknięć
-            Spacer()
-                .frame(height: footerRampHeight)
-                .allowsHitTesting(false)
-
-            HStack(spacing: 12) {
-                if let selected = selectedItem {
-                    HStack(spacing: 6) {
-                        Text(actionDescription(for: selected.kind))
-                            .font(.system(size: 11, weight: .regular))
-                            .foregroundColor(.white.opacity(0.48))
-                        Text(selected.title)
-                            .font(.system(size: 11, weight: .semibold))
-                            .foregroundColor(.white.opacity(0.88))
-                            .lineLimit(1)
-                    }
-                } else {
-                    Text("Brak wyników")
-                        .font(.system(size: 11))
-                        .foregroundColor(.white.opacity(0.45))
-                }
-
-                Spacer()
-
-                // Dyskretny keycap akcji
+        HStack(spacing: 12) {
+            if let selected = selectedItem {
                 HStack(spacing: 6) {
-                    Text("↵")
-                        .font(.system(size: 10, weight: .bold))
-                        .foregroundColor(.white.opacity(0.85))
-                        .padding(.horizontal, 6)
-                        .padding(.vertical, 2.5)
-                        .background(Color.white.opacity(0.12))
-                        .clipShape(RoundedRectangle(cornerRadius: 4, style: .continuous))
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 4, style: .continuous)
-                                .stroke(Color.white.opacity(0.14), lineWidth: 0.5)
-                        )
-
-                    Text("Wykonaj")
-                        .font(.system(size: 11, weight: .medium))
-                        .foregroundColor(.white.opacity(0.6))
+                    Text(actionDescription(for: selected.kind))
+                        .font(.system(size: 11, weight: .regular))
+                        .foregroundColor(.white.opacity(0.48))
+                    Text(selected.title)
+                        .font(.system(size: 11, weight: .semibold))
+                        .foregroundColor(.white.opacity(0.88))
+                        .lineLimit(1)
                 }
+            } else {
+                Text("Brak wyników")
+                    .font(.system(size: 11))
+                    .foregroundColor(.white.opacity(0.45))
             }
-            .padding(.horizontal, 20)
-            .padding(.bottom, 12)
-            .padding(.top, 4)
-            .contentShape(Rectangle())
-        }
-        .background(
-            ZStack {
-                VisualEffectBlur(material: .hudWindow, blendingMode: .behindWindow, cornerRadius: 0)
-                Color(red: 15/255, green: 17/255, blue: 23/255).opacity(0.90)
-            }
-        )
-        .mask(
-            VStack(spacing: 0) {
-                // Łagodna rampa wejściowa: spadek z 0% do 90%
-                LinearGradient(
-                    stops: [
-                        .init(color: .clear, location: 0.0),
-                        .init(color: .black.opacity(0.12), location: 0.12),
-                        .init(color: .black.opacity(0.48), location: 0.38),
-                        .init(color: .black.opacity(0.85), location: 0.70),
-                        .init(color: .black, location: 1.0)
-                    ],
-                    startPoint: .top,
-                    endPoint: .bottom
-                )
-                .frame(height: footerRampHeight)
 
-                // Strefa przycisków akcji: 100% maski -> pełne 90% krycia tła
-                Rectangle()
-                    .fill(Color.black)
-                    .frame(height: footerActionHeight)
+            Spacer()
+
+            // Dyskretny keycap akcji
+            HStack(spacing: 6) {
+                Text("↵")
+                    .font(.system(size: 10, weight: .bold))
+                    .foregroundColor(.white.opacity(0.85))
+                    .padding(.horizontal, 6)
+                    .padding(.vertical, 2.5)
+                    .background(Color.white.opacity(0.12))
+                    .clipShape(RoundedRectangle(cornerRadius: 4, style: .continuous))
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 4, style: .continuous)
+                            .stroke(Color.white.opacity(0.14), lineWidth: 0.5)
+                    )
+
+                Text("Wykonaj")
+                    .font(.system(size: 11, weight: .medium))
+                    .foregroundColor(.white.opacity(0.6))
             }
-        )
+        }
+        .padding(.horizontal, 20)
+        .frame(height: footerHeight)
+        .background(Color.clear)
     }
 
     private var selectedItem: SearchItem? {
@@ -443,6 +372,7 @@ public struct VisualEffectBlur: NSViewRepresentable {
         view.state = .active
         view.wantsLayer = true
         view.layer?.cornerRadius = cornerRadius
+        view.layer?.cornerCurve = .continuous
         view.layer?.masksToBounds = true
         return view
     }
@@ -451,5 +381,7 @@ public struct VisualEffectBlur: NSViewRepresentable {
         nsView.material = material
         nsView.blendingMode = blendingMode
         nsView.layer?.cornerRadius = cornerRadius
+        nsView.layer?.cornerCurve = .continuous
+        nsView.layer?.masksToBounds = true
     }
 }

@@ -27,6 +27,7 @@ public final class FloatingHUDPanel: NSPanel {
 
     public func showHUD() {
         center()
+        invalidateShadow()
         makeKeyAndOrderFront(nil)
         NSApp.activate(ignoringOtherApps: true)
         if let contentView = self.contentView {

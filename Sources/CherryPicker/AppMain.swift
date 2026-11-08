@@ -36,7 +36,12 @@ final class AppMain: NSObject, NSApplicationDelegate {
         let contentView = MainHUDView { [weak panel] in
             panel?.hideHUD(restoreFocus: true)
         }
-        panel.contentView = NSHostingView(rootView: contentView)
+        let hostingView = NSHostingView(rootView: contentView)
+        hostingView.wantsLayer = true
+        hostingView.layer?.cornerRadius = 26
+        hostingView.layer?.cornerCurve = .continuous
+        hostingView.layer?.masksToBounds = true
+        panel.contentView = hostingView
         panel.center()
         self.hudPanel = panel
 
