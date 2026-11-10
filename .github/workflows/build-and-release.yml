@@ -32,7 +32,7 @@ permissions:
 
 jobs:
   build-and-release:
-    runs-on: macos-14   # Apple Silicon (M1/M2/M3) GitHub runner
+    runs-on: macos-latest   # Apple Silicon macOS runner
 
     steps:
       - name: Checkout repository
