@@ -9,7 +9,7 @@ name: Build & Release (Nightly & Stable)
   workflow_dispatch:
     inputs:
       release_type:
-        description: 'Typ wydania: "nightly" lub "stable"'
+        description: 'Release type: "nightly" or "stable"'
         required: true
         default: 'nightly'
         type: choice
@@ -17,7 +17,7 @@ name: Build & Release (Nightly & Stable)
           - nightly
           - stable
       version:
-        description: 'Numer wersji dla wydania stable (np. 1.0.0 - ignorowane przy nightly)'
+        description: 'Version number for stable release (e.g. 1.0.0 - ignored for nightly)'
         required: false
         default: '1.0.0'
 
@@ -26,15 +26,15 @@ permissions:
 
 jobs:
   build-and-release:
-    runs-on: macos-14   # Apple Silicon (M1/M2/M3) runner na GitHubie
+    runs-on: macos-14   # Apple Silicon (M1/M2/M3) GitHub runner
 
     steps:
-      - name: Pobranie kodu (Checkout)
+      - name: Checkout repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Ustalenie metadanych wydania
+      - name: Determine release metadata
         id: meta
         run: |
           SHORT_SHA=$(git rev-parse --short HEAD)
@@ -46,14 +46,14 @@ jobs:
             RELEASE_NAME="CherryPicker ${TAG_NAME}"
             IS_PRERELEASE="false"
             DMG_NAME="CherryPicker-${VERSION}-arm64.dmg"
-            echo "Oficjalne stabilne wydanie CherryPicker ${TAG_NAME}." > release_body.md
+            echo "Official stable release of CherryPicker ${TAG_NAME}." > release_body.md
           elif [[ "${{ github.event_name }}" == "workflow_dispatch" && "${{ github.event.inputs.release_type }}" == "stable" ]]; then
             VERSION="${{ github.event.inputs.version }}"
             TAG_NAME="v${VERSION}"
             RELEASE_NAME="CherryPicker ${TAG_NAME}"
             IS_PRERELEASE="false"
             DMG_NAME="CherryPicker-${VERSION}-arm64.dmg"
-            echo "Oficjalne wydanie CherryPicker ${TAG_NAME}." > release_body.md
+            echo "Official release of CherryPicker ${TAG_NAME}." > release_body.md
           else
             VERSION="nightly-${SHORT_SHA}"
             TAG_NAME="nightly"
@@ -73,12 +73,12 @@ jobs:
           echo "is_prerelease=${IS_PRERELEASE}" >> $GITHUB_OUTPUT
           echo "dmg_name=${DMG_NAME}" >> $GITHUB_OUTPUT
 
-      - name: Zbudowanie paczki .app i instalatora DMG
+      - name: Build .app package and DMG installer
         run: |
           chmod +x scripts/build_dmg.sh
           ./scripts/build_dmg.sh "${{ steps.meta.outputs.version }}" "arm64" "${{ steps.meta.outputs.dmg_name }}"
 
-      - name: Aktualizacja taga Nightly w Git (jeśli Nightly)
+      - name: Update Git Nightly tag
         if: steps.meta.outputs.is_prerelease == 'true'
         run: |
           git config user.name "github-actions[bot]"
@@ -86,7 +86,7 @@ jobs:
           git tag -f nightly
           git push -f origin nightly || true
 
-      - name: Publikacja lub aktualizacja GitHub Release
+      - name: Publish or update GitHub Release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ steps.meta.outputs.tag_name }}

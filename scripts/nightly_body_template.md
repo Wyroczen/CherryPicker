@@ -1,15 +1,15 @@
 ### 🍒 CherryPicker Nightly Build (__SHORT_SHA__)
-Automatyczny build deweloperski z najnowszego stanu gałęzi `main`.
+Automated developer build built from the latest commit on `main`.
 
-* **Ostatni commit:** __COMMIT_MSG__ (`__SHORT_SHA__`)
-* **Architektura:** Apple Silicon (`arm64`)
+* **Latest Commit:** __COMMIT_MSG__ (`__SHORT_SHA__`)
+* **Architecture:** Apple Silicon (`arm64`)
 
-#### Jak zainstalować:
-1. Pobierz plik `__DMG_NAME__` poniżej.
-2. Otwórz pobrany obraz DMG i przeciągnij **CherryPicker** do folderu **Applications**.
-3. Przy pierwszym uruchomieniu system macOS wyświetli ostrzeżenie Gatekeepera (ponieważ aplikacja jest darmowym projektem open-source bez płatnego certyfikatu deweloperskiego Apple):
-   - Wejdź w **Ustawienia systemowe -> Prywatność i bezpieczeństwo**, przewiń na dół i kliknij **Otwórz mimo to**.
-   - Albo uruchom w Terminalu:
+#### How to install:
+1. Download the `__DMG_NAME__` installer below.
+2. Open the DMG image and drag **CherryPicker** to your **Applications** folder.
+3. On first launch, macOS Gatekeeper may show an untrusted developer prompt (as this is an open-source build without an Apple Developer certificate):
+   - Navigate to **System Settings -> Privacy & Security**, scroll down to the Security section, and click **Open Anyway**.
+   - Or alternatively, run the following command in Terminal:
      ```bash
      xattr -cr /Applications/CherryPicker.app
      ```

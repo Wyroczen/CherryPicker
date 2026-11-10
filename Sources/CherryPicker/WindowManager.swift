@@ -112,110 +112,110 @@ public enum WindowAction: String, CaseIterable, Identifiable, Sendable {
 
     public var descriptionText: String {
         switch self {
-        case .leftHalf: return "Lewa połowa ekranu (50% szerokości)"
-        case .rightHalf: return "Prawa połowa ekranu (50% szerokości)"
-        case .topHalf: return "Górna połowa ekranu (50% wysokości)"
-        case .bottomHalf: return "Dolna połowa ekranu (50% wysokości)"
-        case .centerHalf: return "Wyśrodkowane 50% szerokości ekranu"
+        case .leftHalf: return "Left half of screen (50% width)"
+        case .rightHalf: return "Right half of screen (50% width)"
+        case .topHalf: return "Top half of screen (50% height)"
+        case .bottomHalf: return "Bottom half of screen (50% height)"
+        case .centerHalf: return "Centered 50% screen width"
 
-        case .firstThird: return "Lewa jedna trzecia ekranu (33% szerokości)"
-        case .centerThird: return "Środkowa jedna trzecia ekranu (33% szerokości)"
-        case .lastThird: return "Prawa jedna trzecia ekranu (33% szerokości)"
-        case .topThird: return "Górna jedna trzecia ekranu (33% wysokości)"
-        case .middleThird: return "Środkowa pozioma jedna trzecia (33% wysokości)"
-        case .bottomThird: return "Dolna jedna trzecia ekranu (33% wysokości)"
+        case .firstThird: return "Left third of screen (33% width)"
+        case .centerThird: return "Center third of screen (33% width)"
+        case .lastThird: return "Right third of screen (33% width)"
+        case .topThird: return "Top third of screen (33% height)"
+        case .middleThird: return "Middle horizontal third (33% height)"
+        case .bottomThird: return "Bottom third of screen (33% height)"
 
-        case .firstTwoThirds: return "Lewe dwie trzecie ekranu (67% szerokości)"
-        case .centerTwoThirds: return "Środkowe dwie trzecie ekranu (67% szerokości)"
-        case .lastTwoThirds: return "Prawe dwie trzecie ekranu (67% szerokości)"
-        case .topTwoThirds: return "Górne dwie trzecie ekranu (67% wysokości)"
-        case .bottomTwoThirds: return "Dolne dwie trzecie ekranu (67% wysokości)"
-        case .topCenterTwoThirds: return "Górne wyśrodkowane 2/3 szerokości i wysokości"
-        case .bottomCenterTwoThirds: return "Dolne wyśrodkowane 2/3 szerokości i wysokości"
+        case .firstTwoThirds: return "Left two thirds of screen (67% width)"
+        case .centerTwoThirds: return "Center two thirds of screen (67% width)"
+        case .lastTwoThirds: return "Right two thirds of screen (67% width)"
+        case .topTwoThirds: return "Top two thirds of screen (67% height)"
+        case .bottomTwoThirds: return "Bottom two thirds of screen (67% height)"
+        case .topCenterTwoThirds: return "Top centered 2/3 width and height"
+        case .bottomCenterTwoThirds: return "Bottom centered 2/3 width and height"
 
-        case .topLeftQuarter: return "Lewa górna ćwiartka ekranu"
-        case .topRightQuarter: return "Prawa górna ćwiartka ekranu"
-        case .bottomLeftQuarter: return "Lewa dolna ćwiartka ekranu"
-        case .bottomRightQuarter: return "Prawa dolna ćwiartka ekranu"
+        case .topLeftQuarter: return "Top-left quarter of screen"
+        case .topRightQuarter: return "Top-right quarter of screen"
+        case .bottomLeftQuarter: return "Bottom-left quarter of screen"
+        case .bottomRightQuarter: return "Bottom-right quarter of screen"
 
-        case .firstFourth: return "Pierwsza pionowa ćwiartka (25% szerokości)"
-        case .secondFourth: return "Druga pionowa ćwiartka (25% szerokości)"
-        case .thirdFourth: return "Trzecia pionowa ćwiartka (25% szerokości)"
-        case .lastFourth: return "Czwarta pionowa ćwiartka (25% szerokości)"
-        case .topFirstFourth: return "Pierwszy poziomy pas (25% wysokości)"
-        case .topSecondFourth: return "Drugi poziomy pas (25% wysokości)"
-        case .topThirdFourth: return "Trzeci poziomy pas (25% wysokości)"
-        case .topLastFourth: return "Czwarty poziomy pas (25% wysokości)"
+        case .firstFourth: return "First vertical column (25% width)"
+        case .secondFourth: return "Second vertical column (25% width)"
+        case .thirdFourth: return "Third vertical column (25% width)"
+        case .lastFourth: return "Fourth vertical column (25% width)"
+        case .topFirstFourth: return "Top first horizontal band (25% height)"
+        case .topSecondFourth: return "Top second horizontal band (25% height)"
+        case .topThirdFourth: return "Top third horizontal band (25% height)"
+        case .topLastFourth: return "Top last horizontal band (25% height)"
 
-        case .firstThreeFourths: return "Lewe trzy czwarte ekranu (75% szerokości)"
-        case .centerThreeFourths: return "Środkowe trzy czwarte ekranu (75% szerokości)"
-        case .lastThreeFourths: return "Prawe trzy czwarte ekranu (75% szerokości)"
-        case .topThreeFourths: return "Górne trzy czwarte ekranu (75% wysokości)"
-        case .bottomThreeFourths: return "Dolne trzy czwarte ekranu (75% wysokości)"
+        case .firstThreeFourths: return "Left three fourths of screen (75% width)"
+        case .centerThreeFourths: return "Center three fourths of screen (75% width)"
+        case .lastThreeFourths: return "Right three fourths of screen (75% width)"
+        case .topThreeFourths: return "Top three fourths of screen (75% height)"
+        case .bottomThreeFourths: return "Bottom three fourths of screen (75% height)"
 
-        case .topLeftSixth: return "Górna lewa jedna szósta (33% x 50%)"
-        case .topCenterSixth: return "Górna środkowa jedna szósta (33% x 50%)"
-        case .topRightSixth: return "Górna prawa jedna szósta (33% x 50%)"
-        case .bottomLeftSixth: return "Dolna lewa jedna szósta (33% x 50%)"
-        case .bottomCenterSixth: return "Dolna środkowa jedna szósta (33% x 50%)"
-        case .bottomRightSixth: return "Dolna prawa jedna szósta (33% x 50%)"
+        case .topLeftSixth: return "Top-left one sixth (33% x 50%)"
+        case .topCenterSixth: return "Top-center one sixth (33% x 50%)"
+        case .topRightSixth: return "Top-right one sixth (33% x 50%)"
+        case .bottomLeftSixth: return "Bottom-left one sixth (33% x 50%)"
+        case .bottomCenterSixth: return "Bottom-center one sixth (33% x 50%)"
+        case .bottomRightSixth: return "Bottom-right one sixth (33% x 50%)"
 
-        case .maximize: return "Maksymalizacja okna na cały ekran (100%)"
-        case .almostMaximize: return "Prawie maksymalizuj (90% ekranu)"
-        case .maximizeHeight: return "Maksymalizuj wysokość (100% wysokości)"
-        case .maximizeWidth: return "Maksymalizuj szerokość (100% szerokości)"
-        case .reasonableSize: return "Optymalny rozmiar (60% ekranu, max 1024x900)"
-        case .center: return "Wyśrodkowanie okna na ekranie"
+        case .maximize: return "Maximize window to full screen (100%)"
+        case .almostMaximize: return "Almost maximize (90% of screen)"
+        case .maximizeHeight: return "Maximize height (100% height)"
+        case .maximizeWidth: return "Maximize width (100% width)"
+        case .reasonableSize: return "Optimal size (60% of screen, max 1024x900)"
+        case .center: return "Center window on screen"
         }
     }
 
     public var searchKeywords: [String] {
         var keys = [rawValue.lowercased()]
         switch self {
-        case .leftHalf: keys += ["lewo", "lewa", "polowa", "połowa", "half", "left"]
-        case .rightHalf: keys += ["prawo", "prawa", "polowa", "połowa", "half", "right"]
-        case .topHalf: keys += ["gora", "góra", "top", "half", "polowa", "połowa"]
-        case .bottomHalf: keys += ["dol", "dół", "bottom", "half", "polowa", "połowa"]
-        case .centerHalf: keys += ["srodek", "środek", "center", "half", "polowa", "połowa"]
+        case .leftHalf: keys += ["left", "half", "side", "50%"]
+        case .rightHalf: keys += ["right", "half", "side", "50%"]
+        case .topHalf: keys += ["top", "half", "upper", "50%"]
+        case .bottomHalf: keys += ["bottom", "half", "lower", "50%"]
+        case .centerHalf: keys += ["center", "half", "middle", "50%"]
 
-        case .firstThird: keys += ["trzecia", "third", "1/3", "lewa", "first"]
-        case .centerThird: keys += ["trzecia", "third", "1/3", "srodek", "center"]
-        case .lastThird: keys += ["trzecia", "third", "1/3", "prawa", "last"]
-        case .topThird: keys += ["trzecia", "third", "1/3", "gora", "top"]
-        case .middleThird: keys += ["trzecia", "third", "1/3", "srodek", "middle"]
-        case .bottomThird: keys += ["trzecia", "third", "1/3", "dol", "bottom"]
+        case .firstThird: keys += ["third", "1/3", "left", "first"]
+        case .centerThird: keys += ["third", "1/3", "center", "middle"]
+        case .lastThird: keys += ["third", "1/3", "right", "last"]
+        case .topThird: keys += ["third", "1/3", "top", "upper"]
+        case .middleThird: keys += ["third", "1/3", "middle", "center"]
+        case .bottomThird: keys += ["third", "1/3", "bottom", "lower"]
 
-        case .firstTwoThirds: keys += ["dwie trzecie", "two thirds", "2/3", "lewa"]
-        case .centerTwoThirds: keys += ["dwie trzecie", "two thirds", "2/3", "srodek"]
-        case .lastTwoThirds: keys += ["dwie trzecie", "two thirds", "2/3", "prawa"]
-        case .topTwoThirds: keys += ["dwie trzecie", "two thirds", "2/3", "gora"]
-        case .bottomTwoThirds: keys += ["dwie trzecie", "two thirds", "2/3", "dol"]
-        case .topCenterTwoThirds, .bottomCenterTwoThirds: keys += ["dwie trzecie", "two thirds", "2/3", "kwadrat"]
+        case .firstTwoThirds: keys += ["two thirds", "2/3", "left"]
+        case .centerTwoThirds: keys += ["two thirds", "2/3", "center"]
+        case .lastTwoThirds: keys += ["two thirds", "2/3", "right"]
+        case .topTwoThirds: keys += ["two thirds", "2/3", "top"]
+        case .bottomTwoThirds: keys += ["two thirds", "2/3", "bottom"]
+        case .topCenterTwoThirds, .bottomCenterTwoThirds: keys += ["two thirds", "2/3", "square", "center"]
 
-        case .topLeftQuarter: keys += ["cwiartka", "ćwiartka", "quarter", "1/4", "gora lewo"]
-        case .topRightQuarter: keys += ["cwiartka", "ćwiartka", "quarter", "1/4", "gora prawo"]
-        case .bottomLeftQuarter: keys += ["cwiartka", "ćwiartka", "quarter", "1/4", "dol lewo"]
-        case .bottomRightQuarter: keys += ["cwiartka", "ćwiartka", "quarter", "1/4", "dol prawo"]
+        case .topLeftQuarter: keys += ["quarter", "1/4", "top left", "corner"]
+        case .topRightQuarter: keys += ["quarter", "1/4", "top right", "corner"]
+        case .bottomLeftQuarter: keys += ["quarter", "1/4", "bottom left", "corner"]
+        case .bottomRightQuarter: keys += ["quarter", "1/4", "bottom right", "corner"]
 
         case .firstFourth, .secondFourth, .thirdFourth, .lastFourth:
-            keys += ["cwiartka", "ćwiartka", "fourth", "1/4", "kolumna"]
+            keys += ["fourth", "1/4", "column", "quarter"]
         case .topFirstFourth, .topSecondFourth, .topThirdFourth, .topLastFourth:
-            keys += ["cwiartka", "ćwiartka", "fourth", "1/4", "pas"]
+            keys += ["fourth", "1/4", "band", "row", "horizontal"]
 
         case .firstThreeFourths, .centerThreeFourths, .lastThreeFourths,
              .topThreeFourths, .bottomThreeFourths:
-            keys += ["trzy czwarte", "three fourths", "3/4"]
+            keys += ["three fourths", "3/4", "75%"]
 
         case .topLeftSixth, .topCenterSixth, .topRightSixth,
              .bottomLeftSixth, .bottomCenterSixth, .bottomRightSixth:
-            keys += ["szosta", "szósta", "sixth", "1/6", "siatka"]
+            keys += ["sixth", "1/6", "grid"]
 
-        case .maximize: keys += ["max", "maksymalizuj", "pelny ekran", "pełny ekran", "full"]
-        case .almostMaximize: keys += ["prawie", "almost", "90%"]
-        case .maximizeHeight: keys += ["wysokosc", "wysokość", "height"]
-        case .maximizeWidth: keys += ["szerokosc", "szerokość", "width"]
-        case .reasonableSize: keys += ["rozmiar", "optymalny", "reasonable", "size", "60%"]
-        case .center: keys += ["srodek", "środek", "centruj", "center"]
+        case .maximize: keys += ["max", "maximize", "full", "fullscreen", "100%"]
+        case .almostMaximize: keys += ["almost", "almost maximize", "90%"]
+        case .maximizeHeight: keys += ["height", "maximize height", "tall"]
+        case .maximizeWidth: keys += ["width", "maximize width", "wide"]
+        case .reasonableSize: keys += ["reasonable", "optimal", "size", "60%"]
+        case .center: keys += ["center", "middle", "centre"]
         }
         return keys
     }
@@ -312,7 +312,7 @@ public final class WindowManager {
 
     public func applyAction(_ action: WindowAction) {
         guard isAccessibilityGranted(prompt: true) else {
-            print("[WindowManager] Brak uprawnień Dostępności (Accessibility).")
+            print("[WindowManager] Accessibility permission not granted.")
             return
         }
 
@@ -321,7 +321,7 @@ public final class WindowManager {
 
         guard let (window, pid) = getFrontmostWindow(),
               let currentWinRect = getWindowRect(window) else {
-            print("[WindowManager] Nie odnaleziono aktywnego okna.")
+            print("[WindowManager] Active window not found.")
             return
         }
 
