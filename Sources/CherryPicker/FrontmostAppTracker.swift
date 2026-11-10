@@ -52,7 +52,7 @@ public final class FrontmostAppTracker {
             return
         }
 
-        // Ignorujemy własny proces CherryPicker – nie powinien nadpisywać docelowej aplikacji
+        // Ignorujemy własny proces CherryPicker - nie powinien nadpisywać docelowej aplikacji
         if app.processIdentifier == NSRunningApplication.current.processIdentifier {
             return
         }

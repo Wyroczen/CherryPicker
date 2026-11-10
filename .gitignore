@@ -48,3 +48,10 @@ tmp/
 temp/
 scratch/
 .env*
+
+# Web & Astro
+web/node_modules/
+web/dist/
+web/.astro/
+.astro/
+website_prototype.html

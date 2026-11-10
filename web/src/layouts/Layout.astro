@@ -1,0 +1,28 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+}
+
+const { title } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+
+<!doctype html>
+<html lang="pl" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/png" href={`${base}/app-icon.png`} />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+  </head>
+  <body class="min-h-screen relative antialiased selection:bg-rose-600 selection:text-white">
+    <!-- Subtle Ambient Glow in pure Cherry Red & Deep Space -->
+    <div class="fixed top-0 left-1/2 -translate-x-1/2 w-[1200px] h-[550px] bg-gradient-to-b from-rose-600/10 via-rose-600/[0.03] to-transparent blur-3xl pointer-events-none -z-10"></div>
+    <div class="fixed bottom-0 left-1/2 -translate-x-1/2 w-[900px] h-[400px] bg-rose-600/5 blur-[130px] pointer-events-none -z-10"></div>
+
+    <slot />
+  </body>
+</html>

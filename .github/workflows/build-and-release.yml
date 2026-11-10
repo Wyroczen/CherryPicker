@@ -4,6 +4,12 @@ name: Build & Release (Nightly & Stable)
   push:
     branches:
       - main
+    paths-ignore:
+      - 'web/**'
+      - 'docs/**'
+      - '**.md'
+      - '.github/workflows/deploy-pages.yml'
+      - '.github/FUNDING.yml'
     tags:
       - 'v*'
   workflow_dispatch:

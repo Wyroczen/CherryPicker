@@ -1,0 +1,728 @@
+---
+import Layout from '../layouts/Layout.astro';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+
+<Layout title="CherryPicker 🍒 · Ultralight Native macOS Launcher">
+  <!-- Minimalist Navigation Bar -->
+  <header class="sticky top-4 sm:top-6 z-50 max-w-4xl mx-auto px-3 sm:px-4">
+    <nav class="apple-glass-pill rounded-full px-4 sm:px-5 py-2 sm:py-2.5 flex items-center justify-between">
+      <a href="#" class="flex items-center gap-2 sm:gap-2.5 group">
+        <img src={`${base}/app-icon.png`} alt="CherryPicker Icon" class="w-5 h-5 sm:w-6 sm:h-6 rounded-[5px] sm:rounded-[6px] shadow-sm transition-transform group-hover:scale-105 flex-shrink-0" />
+        <span class="font-bold text-sm tracking-tight text-white">CherryPicker</span>
+        <span class="text-[10px] font-mono px-1.5 sm:px-2 py-0.5 rounded-full bg-white/5 text-slate-300 border border-white/10 hidden xs:inline">v1.0 Native</span>
+      </a>
+
+      <div class="flex items-center gap-2 sm:gap-3">
+        <a href="https://github.com/Wyroczen/CherryPicker" target="_blank" 
+           class="hidden sm:flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-medium text-slate-300 hover:text-white bg-white/5 hover:bg-white/10 border border-white/10 transition-colors">
+          <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+          <span>Star on GitHub</span>
+        </a>
+        <a href="https://github.com/Wyroczen/CherryPicker/releases/latest" 
+           class="px-3.5 sm:px-4 py-1.5 rounded-full text-xs font-semibold text-white bg-rose-600 hover:bg-rose-500 shadow-md shadow-rose-950/60 border border-rose-400/30 transition-all hover:scale-[1.02] whitespace-nowrap">
+          Download .dmg
+        </a>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Hero Section -->
+  <main class="max-w-6xl mx-auto px-4 pt-14 sm:pt-20 pb-12 text-center">
+    
+    <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs text-slate-300 mb-6 sm:mb-8 backdrop-blur-md">
+      <span class="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse"></span>
+      <span class="font-medium text-white">Native Swift & AppKit</span>
+      <span class="text-slate-600">·</span>
+      <span class="text-slate-300">Instant Window Tiling</span>
+      <span class="text-slate-600">·</span>
+      <span class="text-rose-400 font-mono">Sub-5ms Spotlight Engine</span>
+    </div>
+
+    <h1 class="text-4xl sm:text-6xl md:text-7xl font-bold tracking-tight text-white mb-5 sm:mb-6 leading-[1.08]">
+      Your Mac. Your Windows.<br />
+      <span class="text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-100 to-rose-300">Instantly.</span>
+    </h1>
+
+    <p class="text-sm sm:text-lg text-slate-400 max-w-xl mx-auto mb-8 sm:mb-10 leading-relaxed font-normal">
+      Ultralight launcher and window manager for macOS. Built in pure Swift and AppKit with native Liquid Glass, zero external dependencies, and zero telemetry.
+    </p>
+
+    <!-- CTAs and Hotkey Pill -->
+    <div class="flex flex-wrap items-center justify-center gap-3 sm:gap-4 mb-12 sm:mb-16">
+      <a href="https://github.com/Wyroczen/CherryPicker/releases/latest" 
+         class="px-5 sm:px-6 py-2.5 sm:py-3 rounded-2xl bg-white text-black hover:bg-slate-100 font-semibold text-xs tracking-tight transition-all hover:scale-[1.02] shadow-xl shadow-white/10 flex items-center gap-2">
+        <span>Download for macOS (.dmg)</span>
+        <span>↓</span>
+      </a>
+
+      <div class="apple-glass-pill px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-2xl flex items-center gap-2 text-xs text-slate-300 font-medium">
+        <span class="text-slate-400">Hotkey:</span>
+        <span class="keycap-apple px-2 py-0.5 rounded text-white font-mono text-[11px] font-medium whitespace-nowrap">⌥ Option</span>
+        <span class="text-slate-500">+</span>
+        <span class="keycap-apple px-2.5 py-0.5 rounded text-white font-mono text-[11px] font-medium whitespace-nowrap">Space</span>
+      </div>
+    </div>
+
+    <!-- SIGNATURE SHOWCASE: 100% Faithful CherryPicker HUD floating on Ambient macOS Nature Wallpapers -->
+    <div class="relative max-w-5xl mx-auto pt-2 pb-12 sm:pb-16 px-1 sm:px-0">
+      
+      <!-- Desktop Display Viewport with Ambient Wallpaper Crossfade -->
+      <div id="desktop-viewport" 
+           class="relative rounded-2xl sm:rounded-[32px] overflow-hidden border border-white/15 shadow-[0_40px_100px_-20px_rgba(0,0,0,0.9)] min-h-[460px] sm:min-h-[510px] flex items-center justify-center p-3 sm:p-8 select-none">
+        
+        <!-- Wallpaper Slides (Automatic Smooth Ambient Crossfade) -->
+        <div id="slide-0" class="wallpaper-slide opacity-100"
+             style={`background-image: url('${base}/wallpapers/sonoma.jpg');`}></div>
+        
+        <div id="slide-1" class="wallpaper-slide opacity-0"
+             style={`background-image: url('${base}/wallpapers/big-sur.jpg');`}></div>
+        
+        <div id="slide-2" class="wallpaper-slide opacity-0"
+             style={`background-image: url('${base}/wallpapers/catalina-sunset.jpg');`}></div>
+
+        <!-- Microscopic Wallpaper Status Badge (Bottom Right) -->
+        <div class="absolute bottom-3 right-4 sm:bottom-4 sm:right-5 z-20 flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1 rounded-full bg-black/40 backdrop-blur-md border border-white/10 text-[9px] sm:text-[10px] font-mono text-white/70">
+          <span class="w-1.5 h-1.5 rounded-full bg-rose-400"></span>
+          <span id="wallpaper-label">Sonoma Hills</span>
+        </div>
+
+        <!-- THE HUD: 1000% Faithful Reproduction of MainHUDView.swift (Matching User Screenshot) -->
+        <div id="hud-card" class="cherrypicker-hud z-20 text-left select-none overflow-hidden mx-auto">
+          
+          <!-- Layer 1: Full-Bleed Results List with Seamless Scroll Gradient Mask (Lines 111-147) -->
+          <div id="hud-scroll-container" 
+               class="seamless-scroll-mask no-scrollbar absolute inset-0 overflow-y-auto px-2.5 sm:px-3 pt-[54px] pb-[40px] space-y-[3px] z-10">
+            
+            <!-- Row 1: Top Half (Fading softly under the top search bar) -->
+            <div class="hud-item flex items-center justify-between py-1.5 px-2.5 rounded-[10px] transition-colors cursor-pointer"
+                 data-action="Top Half" data-kind="Command:">
+              <div class="flex items-center gap-2.5 sm:gap-3 min-w-0">
+                <div class="w-7 h-7 rounded-[7px] bg-gradient-to-br from-[#38bdf8] to-[#2563eb] p-[3.5px] border border-white/35 shadow-sm flex items-start justify-center flex-shrink-0">
+                  <div class="w-full h-full bg-black/25 rounded-[3px] p-[1px] flex items-start">
+                    <div class="w-full h-1/2 bg-white rounded-[1.5px] shadow-sm"></div>
+                  </div>
+                </div>
+                <div class="min-w-0">
+                  <div class="text-[13px] sm:text-[13.5px] font-medium text-white/90 tracking-tight leading-snug truncate">Top Half</div>
+                  <div class="text-[10.5px] sm:text-[11px] text-white/45 leading-tight truncate">Top half of screen (50% height)</div>
+                </div>
+              </div>
+              <span class="hud-badge text-[9.5px] sm:text-[10px] font-semibold text-white/65 px-2 py-0.5 rounded-[6px] bg-white/[0.08] flex-shrink-0 ml-2">
+                Command
+              </span>
+            </div>
+
+            <!-- Row 2: Left Half -->
+            <div class="hud-item flex items-center justify-between py-1.5 px-2.5 rounded-[10px] transition-colors cursor-pointer"
+                 data-action="Left Half" data-kind="Command:">
+              <div class="flex items-center gap-2.5 sm:gap-3 min-w-0">
+                <div class="w-7 h-7 rounded-[7px] bg-gradient-to-br from-[#38bdf8] to-[#2563eb] p-[3.5px] border border-white/35 shadow-sm flex items-center justify-start flex-shrink-0">
+                  <div class="w-full h-full bg-black/25 rounded-[3px] p-[1px] flex items-center">
+                    <div class="w-1/2 h-full bg-white rounded-[1.5px] shadow-sm"></div>
+                  </div>
+                </div>
+                <div class="min-w-0">
+                  <div class="text-[13px] sm:text-[13.5px] font-medium text-white/90 tracking-tight leading-snug truncate">Left Half</div>
+                  <div class="text-[10.5px] sm:text-[11px] text-white/45 leading-tight truncate">Left half of screen (50% width)</div>
+                </div>
+              </div>
+              <span class="hud-badge text-[9.5px] sm:text-[10px] font-semibold text-white/65 px-2 py-0.5 rounded-[6px] bg-white/[0.08] flex-shrink-0 ml-2">
+                Command
+              </span>
+            </div>
+
+            <!-- Row 3: Right Half -->
+            <div class="hud-item flex items-center justify-between py-1.5 px-2.5 rounded-[10px] transition-colors cursor-pointer"
+                 data-action="Right Half" data-kind="Command:">
+              <div class="flex items-center gap-2.5 sm:gap-3 min-w-0">
+                <div class="w-7 h-7 rounded-[7px] bg-gradient-to-br from-[#38bdf8] to-[#2563eb] p-[3.5px] border border-white/35 shadow-sm flex items-center justify-end flex-shrink-0">
+                  <div class="w-full h-full bg-black/25 rounded-[3px] p-[1px] flex items-center justify-end">
+                    <div class="w-1/2 h-full bg-white rounded-[1.5px] shadow-sm"></div>
+                  </div>
+                </div>
+                <div class="min-w-0">
+                  <div class="text-[13px] sm:text-[13.5px] font-medium text-white/90 tracking-tight leading-snug truncate">Right Half</div>
+                  <div class="text-[10.5px] sm:text-[11px] text-white/45 leading-tight truncate">Right half of screen (50% width)</div>
+                </div>
+              </div>
+              <span class="hud-badge text-[9.5px] sm:text-[10px] font-semibold text-white/65 px-2 py-0.5 rounded-[6px] bg-white/[0.08] flex-shrink-0 ml-2">
+                Command
+              </span>
+            </div>
+
+            <!-- Row 4: Maximize -->
+            <div class="hud-item flex items-center justify-between py-1.5 px-2.5 rounded-[10px] transition-colors cursor-pointer"
+                 data-action="Maximize" data-kind="Command:">
+              <div class="flex items-center gap-2.5 sm:gap-3 min-w-0">
+                <div class="w-7 h-7 rounded-[7px] bg-gradient-to-br from-[#38bdf8] to-[#2563eb] p-[3.5px] border border-white/35 shadow-sm flex items-center justify-center flex-shrink-0">
+                  <div class="w-full h-full bg-black/25 rounded-[3px] p-[1px] flex items-center">
+                    <div class="w-full h-full bg-white rounded-[1.5px] shadow-sm"></div>
+                  </div>
+                </div>
+                <div class="min-w-0">
+                  <div class="text-[13px] sm:text-[13.5px] font-medium text-white/90 tracking-tight leading-snug truncate">Maximize</div>
+                  <div class="text-[10.5px] sm:text-[11px] text-white/45 leading-tight truncate">Fill full screen</div>
+                </div>
+              </div>
+              <span class="hud-badge text-[9.5px] sm:text-[10px] font-semibold text-white/65 px-2 py-0.5 rounded-[6px] bg-white/[0.08] flex-shrink-0 ml-2">
+                Command
+              </span>
+            </div>
+
+            <!-- Row 5: First Two Thirds -->
+            <div class="hud-item flex items-center justify-between py-1.5 px-2.5 rounded-[10px] transition-colors cursor-pointer"
+                 data-action="First Two Thirds" data-kind="Command:">
+              <div class="flex items-center gap-2.5 sm:gap-3 min-w-0">
+                <div class="w-7 h-7 rounded-[7px] bg-gradient-to-br from-[#38bdf8] to-[#2563eb] p-[3.5px] border border-white/35 shadow-sm flex items-center justify-start flex-shrink-0">
+                  <div class="w-full h-full bg-black/25 rounded-[3px] p-[1px] flex items-center">
+                    <div class="w-2/3 h-full bg-white rounded-[1.5px] shadow-sm"></div>
+                  </div>
+                </div>
+                <div class="min-w-0">
+                  <div class="text-[13px] sm:text-[13.5px] font-medium text-white/90 tracking-tight leading-snug truncate">First Two Thirds</div>
+                  <div class="text-[10.5px] sm:text-[11px] text-white/45 leading-tight truncate">Left two thirds of screen (66% width)</div>
+                </div>
+              </div>
+              <span class="hud-badge text-[9.5px] sm:text-[10px] font-semibold text-white/65 px-2 py-0.5 rounded-[6px] bg-white/[0.08] flex-shrink-0 ml-2">
+                Command
+              </span>
+            </div>
+
+            <!-- Row 6: Xcode (SELECTED STATE - Exactly matches user's screenshot media_1794335496886_714a4531.jpg) -->
+            <div class="hud-item flex items-center justify-between py-1.5 px-2.5 rounded-[10px] bg-white/[0.11] transition-colors cursor-pointer"
+                 data-action="Xcode" data-kind="Open application:">
+              <div class="flex items-center gap-2.5 sm:gap-3 min-w-0">
+                <div class="w-7 h-7 rounded-[7px] bg-sky-950/70 border border-sky-400/30 flex items-center justify-center text-xs shadow-sm flex-shrink-0">
+                  🔨
+                </div>
+                <div class="min-w-0">
+                  <div class="text-[13px] sm:text-[13.5px] font-semibold text-white tracking-tight leading-snug truncate">Xcode</div>
+                  <div class="text-[10.5px] sm:text-[11px] text-white/70 leading-tight truncate">/Applications/Xcode.app</div>
+                </div>
+              </div>
+              <span class="hud-badge text-[9.5px] sm:text-[10px] font-semibold text-white/90 px-2 py-0.5 rounded-[6px] bg-white/[0.16] flex-shrink-0 ml-2">
+                Application
+              </span>
+            </div>
+
+            <!-- Row 7: Safari -->
+            <div class="hud-item flex items-center justify-between py-1.5 px-2.5 rounded-[10px] transition-colors cursor-pointer"
+                 data-action="Safari" data-kind="Open application:">
+              <div class="flex items-center gap-2.5 sm:gap-3 min-w-0">
+                <div class="w-7 h-7 rounded-[7px] bg-blue-950/70 border border-blue-400/30 flex items-center justify-center text-xs shadow-sm flex-shrink-0">
+                  🧭
+                </div>
+                <div class="min-w-0">
+                  <div class="text-[13px] sm:text-[13.5px] font-medium text-white/90 tracking-tight leading-snug truncate">Safari</div>
+                  <div class="text-[10.5px] sm:text-[11px] text-white/45 leading-tight truncate">/Applications/Safari.app</div>
+                </div>
+              </div>
+              <span class="hud-badge text-[9.5px] sm:text-[10px] font-semibold text-white/65 px-2 py-0.5 rounded-[6px] bg-white/[0.08] flex-shrink-0 ml-2">
+                Application
+              </span>
+            </div>
+
+            <!-- Row 8: MainHUDView.swift (File Result from Spotlight MDQuery) -->
+            <div class="hud-item flex items-center justify-between py-1.5 px-2.5 rounded-[10px] transition-colors cursor-pointer"
+                 data-action="MainHUDView.swift" data-kind="Open file:">
+              <div class="flex items-center gap-2.5 sm:gap-3 min-w-0">
+                <div class="w-7 h-7 rounded-[7px] bg-amber-500/15 border border-amber-400/30 flex items-center justify-center text-xs shadow-sm flex-shrink-0">
+                  <svg class="w-4 h-4 text-amber-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                    <line x1="9" y1="13" x2="15" y2="13"></line>
+                    <line x1="9" y1="17" x2="13" y2="17"></line>
+                  </svg>
+                </div>
+                <div class="min-w-0">
+                  <div class="text-[13px] sm:text-[13.5px] font-medium text-white/90 tracking-tight leading-snug truncate">MainHUDView.swift</div>
+                  <div class="text-[10.5px] sm:text-[11px] text-white/45 leading-tight truncate">~/Projects/CherryPicker/Sources/MainHUDView.swift</div>
+                </div>
+              </div>
+              <span class="hud-badge text-[9.5px] sm:text-[10px] font-semibold text-white/65 px-2 py-0.5 rounded-[6px] bg-white/[0.08] flex-shrink-0 ml-2">
+                File
+              </span>
+            </div>
+
+            <!-- Row 9: Terminal -->
+            <div class="hud-item flex items-center justify-between py-1.5 px-2.5 rounded-[10px] transition-colors cursor-pointer"
+                 data-action="Terminal" data-kind="Open application:">
+              <div class="flex items-center gap-2.5 sm:gap-3 min-w-0">
+                <div class="w-7 h-7 rounded-[7px] bg-black/80 border border-white/20 flex items-center justify-center text-[11px] font-mono font-bold text-white shadow-sm flex-shrink-0">
+                  &gt;_
+                </div>
+                <div class="min-w-0">
+                  <div class="text-[13px] sm:text-[13.5px] font-medium text-white/90 tracking-tight leading-snug truncate">Terminal</div>
+                  <div class="text-[10.5px] sm:text-[11px] text-white/45 leading-tight truncate">/System/Applications/Utilities/Terminal.app</div>
+                </div>
+              </div>
+              <span class="hud-badge text-[9.5px] sm:text-[10px] font-semibold text-white/65 px-2 py-0.5 rounded-[6px] bg-white/[0.08] flex-shrink-0 ml-2">
+                Application
+              </span>
+            </div>
+
+            <!-- Row 10: Project_Roadmap.pdf (File Result from Spotlight MDQuery) -->
+            <div class="hud-item flex items-center justify-between py-1.5 px-2.5 rounded-[10px] transition-colors cursor-pointer"
+                 data-action="Project_Roadmap.pdf" data-kind="Open file:">
+              <div class="flex items-center gap-2.5 sm:gap-3 min-w-0">
+                <div class="w-7 h-7 rounded-[7px] bg-rose-500/15 border border-rose-400/30 flex items-center justify-center text-xs shadow-sm flex-shrink-0">
+                  <svg class="w-4 h-4 text-rose-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                    <text x="7" y="17" font-size="7" font-family="monospace" font-weight="bold" fill="currentColor">PDF</text>
+                  </svg>
+                </div>
+                <div class="min-w-0">
+                  <div class="text-[13px] sm:text-[13.5px] font-medium text-white/90 tracking-tight leading-snug truncate">Project_Roadmap.pdf</div>
+                  <div class="text-[10.5px] sm:text-[11px] text-white/45 leading-tight truncate">~/Documents/Project_Roadmap.pdf</div>
+                </div>
+              </div>
+              <span class="hud-badge text-[9.5px] sm:text-[10px] font-semibold text-white/65 px-2 py-0.5 rounded-[6px] bg-white/[0.08] flex-shrink-0 ml-2">
+                File
+              </span>
+            </div>
+
+            <!-- Row 9: Center Half -->
+            <div class="hud-item flex items-center justify-between py-1.5 px-2.5 rounded-[10px] transition-colors cursor-pointer"
+                 data-action="Center Half" data-kind="Command:">
+              <div class="flex items-center gap-2.5 sm:gap-3 min-w-0">
+                <div class="w-7 h-7 rounded-[7px] bg-gradient-to-br from-[#38bdf8] to-[#2563eb] p-[3.5px] border border-white/35 shadow-sm flex items-center justify-center flex-shrink-0">
+                  <div class="w-full h-full bg-black/25 rounded-[3px] p-[1px] flex items-center justify-center">
+                    <div class="w-1/2 h-full bg-white rounded-[1.5px] shadow-sm"></div>
+                  </div>
+                </div>
+                <div class="min-w-0">
+                  <div class="text-[13px] sm:text-[13.5px] font-medium text-white/90 tracking-tight leading-snug truncate">Center Half</div>
+                  <div class="text-[10.5px] sm:text-[11px] text-white/45 leading-tight truncate">Centered 50% screen width</div>
+                </div>
+              </div>
+              <span class="hud-badge text-[9.5px] sm:text-[10px] font-semibold text-white/65 px-2 py-0.5 rounded-[6px] bg-white/[0.08] flex-shrink-0 ml-2">
+                Command
+              </span>
+            </div>
+
+            <!-- Row 10: System Settings -->
+            <div class="hud-item flex items-center justify-between py-1.5 px-2.5 rounded-[10px] transition-colors cursor-pointer"
+                 data-action="System Settings" data-kind="Open application:">
+              <div class="flex items-center gap-2.5 sm:gap-3 min-w-0">
+                <div class="w-7 h-7 rounded-[7px] bg-slate-800 border border-slate-600/40 flex items-center justify-center text-xs shadow-sm flex-shrink-0">
+                  ⚙️
+                </div>
+                <div class="min-w-0">
+                  <div class="text-[13px] sm:text-[13.5px] font-medium text-white/90 tracking-tight leading-snug truncate">System Settings</div>
+                  <div class="text-[10.5px] sm:text-[11px] text-white/45 leading-tight truncate">/System/Applications/System Settings.app</div>
+                </div>
+              </div>
+              <span class="hud-badge text-[9.5px] sm:text-[10px] font-semibold text-white/65 px-2 py-0.5 rounded-[6px] bg-white/[0.08] flex-shrink-0 ml-2">
+                Application
+              </span>
+            </div>
+
+            <!-- Row 11: Top-Right Quarter (Fading softly above footer) -->
+            <div class="hud-item flex items-center justify-between py-1.5 px-2.5 rounded-[10px] transition-colors cursor-pointer"
+                 data-action="Top-Right Quarter" data-kind="Command:">
+              <div class="flex items-center gap-2.5 sm:gap-3 min-w-0">
+                <div class="w-7 h-7 rounded-[7px] bg-gradient-to-br from-[#38bdf8] to-[#2563eb] p-[3.5px] border border-white/35 shadow-sm flex items-start justify-end flex-shrink-0">
+                  <div class="w-full h-full bg-black/25 rounded-[3px] p-[1px] flex items-start justify-end">
+                    <div class="w-1/2 h-1/2 bg-white rounded-[1.5px] shadow-sm"></div>
+                  </div>
+                </div>
+                <div class="min-w-0">
+                  <div class="text-[13px] sm:text-[13.5px] font-medium text-white/90 tracking-tight leading-snug truncate">Top-Right Quarter</div>
+                  <div class="text-[10.5px] sm:text-[11px] text-white/45 leading-tight truncate">Top right quarter of screen (25% area)</div>
+                </div>
+              </div>
+              <span class="hud-badge text-[9.5px] sm:text-[10px] font-semibold text-white/65 px-2 py-0.5 rounded-[6px] bg-white/[0.08] flex-shrink-0 ml-2">
+                Command
+              </span>
+            </div>
+
+          </div>
+
+          <!-- Layer 2: Floating Header (Height: 52px, Background: Color.clear, NO SEPARATOR BORDER) -->
+          <div class="absolute top-0 inset-x-0 h-[52px] px-4 sm:px-[22px] flex items-center gap-2.5 sm:gap-[14px] z-30 bg-transparent pointer-events-auto">
+            <!-- SF Pro Magnifying Glass Icon -->
+            <svg class="w-4 h-4 sm:w-[19px] sm:h-[19px] text-white/55 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <input type="text" 
+                   id="search-input" 
+                   placeholder="Search applications, files, or commands..." 
+                   class="w-full bg-transparent border-none text-white text-[14px] sm:text-[17px] font-normal tracking-tight placeholder-white/50 focus:outline-none" />
+          </div>
+
+          <!-- Layer 3: Floating Footer (Height: 38px, Background: Color.clear, NO SEPARATOR BORDER) -->
+          <div class="absolute bottom-0 inset-x-0 h-[38px] px-4 sm:px-[20px] flex items-center justify-between z-30 bg-transparent text-[10.5px] sm:text-[11px] pointer-events-none">
+            <div class="flex items-center gap-1.5 truncate mr-2">
+              <span id="footer-kind" class="text-white/48 font-normal">Open application:</span>
+              <span id="footer-title" class="text-white/88 font-semibold truncate">Xcode</span>
+            </div>
+            <div class="flex items-center gap-1.5 flex-shrink-0">
+              <span class="keycap-apple px-1.5 py-0.5 rounded text-[10px] font-mono text-white/85 font-bold">↵</span>
+              <span class="text-white/60 font-medium">Open</span>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- Apple-Style Key Performance Metrics (Fact-Based, Zero Electron Bloat) -->
+    <div class="max-w-3xl mx-auto pt-10 sm:pt-12 pb-16 sm:pb-20 border-t border-b border-white/[0.08] grid grid-cols-1 md:grid-cols-3 divide-y divide-white/[0.08] md:divide-y-0 text-center">
+      
+      <div class="py-6 md:py-0">
+        <div class="text-3xl sm:text-4xl font-semibold tracking-tight text-white font-mono">Zero</div>
+        <div class="text-xs text-rose-400 font-semibold mt-1 uppercase tracking-wider">Web Runtimes</div>
+        <p class="text-xs text-slate-400 mt-2 leading-relaxed px-4 md:px-2">
+          Pure Swift and AppKit binary. No Chromium, Node.js, or Electron background runtimes.
+        </p>
+      </div>
+
+      <div class="py-6 md:py-0 md:border-l md:border-r md:border-white/[0.08] md:px-6">
+        <div class="text-3xl sm:text-4xl font-semibold tracking-tight text-white font-mono">&lt; 5 ms</div>
+        <div class="text-xs text-rose-400 font-semibold mt-1 uppercase tracking-wider">CoreServices Engine</div>
+        <p class="text-xs text-slate-400 mt-2 leading-relaxed px-4 md:px-2">
+          Direct low-level MDQuery Spotlight indexing with instant in-memory result filtering.
+        </p>
+      </div>
+
+      <div class="py-6 md:py-0">
+        <div class="text-3xl sm:text-4xl font-semibold tracking-tight text-white font-mono">0.0%</div>
+        <div class="text-xs text-rose-400 font-semibold mt-1 uppercase tracking-wider">Idle CPU Usage</div>
+        <p class="text-xs text-slate-400 mt-2 leading-relaxed px-4 md:px-2">
+          Event-driven Carbon hotkey listener. Zero background polling and zero battery drain.
+        </p>
+      </div>
+
+    </div>
+
+    <!-- Window Management & Multitasking Feature Spotlight -->
+    <section class="max-w-4xl mx-auto py-14 sm:py-20 text-left">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-12 items-center">
+        
+        <div>
+          <span class="text-xs uppercase tracking-widest text-rose-500 font-semibold font-mono">Window Management & Multitasking</span>
+          <h2 class="text-2xl sm:text-3xl font-bold tracking-tight text-white mt-2 mb-4">
+            Instant window snapping.<br />Master your workspace.
+          </h2>
+          <p class="text-slate-400 text-sm leading-relaxed mb-6">
+            Stop dragging window borders. CherryPicker resizes and snaps your active application in a fraction of a second. Arrange windows into halves, two thirds, quarters, or center with swift keyboard commands so working across multiple apps side by side feels fluid and natural.
+          </p>
+
+          <ul class="space-y-3.5 text-xs text-slate-300">
+            <li class="flex items-center gap-3">
+              <span class="w-1.5 h-1.5 rounded-full bg-rose-500 flex-shrink-0"></span>
+              <span><strong>Effortless tiling</strong>: Snap to halves, two thirds, or quarters without ever touching your mouse</span>
+            </li>
+            <li class="flex items-center gap-3">
+              <span class="w-1.5 h-1.5 rounded-full bg-rose-500 flex-shrink-0"></span>
+              <span><strong>Live monitor previews</strong>: Dynamic vector icons reflect exact screen geometry before you snap</span>
+            </li>
+            <li class="flex items-center gap-3">
+              <span class="w-1.5 h-1.5 rounded-full bg-rose-500 flex-shrink-0"></span>
+              <span><strong>Multi-monitor and Spaces aware</strong>: Accurately positions windows across all active displays</span>
+            </li>
+            <li class="flex items-center gap-3">
+              <span class="w-1.5 h-1.5 rounded-full bg-rose-500 flex-shrink-0"></span>
+              <span>Lightweight <strong>.accessory</strong> process with 100% offline privacy and zero Dock clutter</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Detail Card: Vector Window Preview Icons -->
+        <div class="p-4 sm:p-6 rounded-3xl bg-white/[0.03] border border-white/[0.08] backdrop-blur-xl shadow-xl">
+          <div class="text-[11px] font-mono text-slate-400 mb-4 flex items-center justify-between">
+            <span>Dynamic Monitor Previews</span>
+            <span class="text-rose-400">WindowPreviewIcon</span>
+          </div>
+
+          <div class="grid grid-cols-3 gap-2 sm:gap-3">
+            <!-- Preview 1: Left Half -->
+            <div class="p-2.5 sm:p-3 rounded-2xl bg-black/40 border border-white/5 flex flex-col items-center text-center">
+              <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-[8px] bg-gradient-to-br from-[#38bdf8] to-[#2563eb] p-[3.5px] sm:p-[4px] border border-white/30 shadow-sm flex items-center mb-1.5 sm:mb-2">
+                <div class="w-full h-full bg-black/30 rounded-[3px] p-[1px] flex items-center">
+                  <div class="w-1/2 h-full bg-white rounded-[1.5px]"></div>
+                </div>
+              </div>
+              <span class="text-[10px] sm:text-[11px] font-medium text-white">Left Half</span>
+            </div>
+
+            <!-- Preview 2: Right Half -->
+            <div class="p-2.5 sm:p-3 rounded-2xl bg-black/40 border border-white/5 flex flex-col items-center text-center">
+              <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-[8px] bg-gradient-to-br from-[#38bdf8] to-[#2563eb] p-[3.5px] sm:p-[4px] border border-white/30 shadow-sm flex items-center justify-end mb-1.5 sm:mb-2">
+                <div class="w-full h-full bg-black/30 rounded-[3px] p-[1px] flex items-center justify-end">
+                  <div class="w-1/2 h-full bg-white rounded-[1.5px]"></div>
+                </div>
+              </div>
+              <span class="text-[10px] sm:text-[11px] font-medium text-white">Right Half</span>
+            </div>
+
+            <!-- Preview 3: Maximize -->
+            <div class="p-2.5 sm:p-3 rounded-2xl bg-black/40 border border-white/5 flex flex-col items-center text-center">
+              <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-[8px] bg-gradient-to-br from-[#38bdf8] to-[#2563eb] p-[3.5px] sm:p-[4px] border border-white/30 shadow-sm flex items-center justify-center mb-1.5 sm:mb-2">
+                <div class="w-full h-full bg-black/30 rounded-[3px] p-[1px] flex items-center">
+                  <div class="w-full h-full bg-white rounded-[1.5px]"></div>
+                </div>
+              </div>
+              <span class="text-[10px] sm:text-[11px] font-medium text-white">Maximize</span>
+            </div>
+
+            <!-- Preview 4: First Two Thirds -->
+            <div class="p-2.5 sm:p-3 rounded-2xl bg-black/40 border border-white/5 flex flex-col items-center text-center">
+              <div class="w-8 h-8 rounded-[8px] bg-gradient-to-br from-[#38bdf8] to-[#2563eb] p-[3.5px] sm:p-[4px] border border-white/30 shadow-sm flex items-center mb-1.5 sm:mb-2">
+                <div class="w-full h-full bg-black/30 rounded-[3px] p-[1px] flex items-center">
+                  <div class="w-2/3 h-full bg-white rounded-[1.5px]"></div>
+                </div>
+              </div>
+              <span class="text-[10px] sm:text-[11px] font-medium text-white">Two Thirds</span>
+            </div>
+
+            <!-- Preview 5: Quarter Top-Right -->
+            <div class="p-2.5 sm:p-3 rounded-2xl bg-black/40 border border-white/5 flex flex-col items-center text-center">
+              <div class="w-8 h-8 rounded-[8px] bg-gradient-to-br from-[#38bdf8] to-[#2563eb] p-[3.5px] border border-white/30 shadow-sm flex items-center justify-end mb-1.5 sm:mb-2">
+                <div class="w-full h-full bg-black/30 rounded-[3px] p-[1px] flex justify-end">
+                  <div class="w-1/2 h-1/2 bg-white rounded-[1.5px]"></div>
+                </div>
+              </div>
+              <span class="text-[10px] sm:text-[11px] font-medium text-white">Quarter TR</span>
+            </div>
+
+            <!-- Preview 6: Center -->
+            <div class="p-2.5 sm:p-3 rounded-2xl bg-black/40 border border-white/5 flex flex-col items-center text-center">
+              <div class="w-8 h-8 rounded-[8px] bg-gradient-to-br from-[#38bdf8] to-[#2563eb] p-[3.5px] sm:p-[4px] border border-white/30 shadow-sm flex items-center justify-center mb-1.5 sm:mb-2">
+                <div class="w-full h-full bg-black/30 rounded-[3px] p-[1px] flex items-center justify-center">
+                  <div class="w-2/3 h-2/3 bg-white rounded-[1.5px]"></div>
+                </div>
+              </div>
+              <span class="text-[10px] sm:text-[11px] font-medium text-white">Center</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Installation Section: Turnkey App (.dmg) & Build from Source -->
+    <section id="install" class="max-w-3xl mx-auto py-12 text-left">
+      <div class="text-center mb-8">
+        <span class="text-xs uppercase tracking-widest text-rose-500 font-semibold font-mono">Get Started</span>
+        <h2 class="text-2xl sm:text-3xl font-bold tracking-tight text-white mt-1">Installation</h2>
+        <p class="text-xs sm:text-sm text-slate-400 mt-2">Download the ready-to-run macOS app or compile it locally from source.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+        
+        <!-- Option 1: Turnkey App Download (.dmg) -->
+        <div class="p-5 sm:p-6 rounded-3xl bg-white/[0.04] border border-white/[0.12] flex flex-col justify-between shadow-xl backdrop-blur-xl">
+          <div>
+            <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[11px] font-medium mb-4">
+              <span>●</span> Recommended for everyone
+            </div>
+            <h3 class="text-lg font-bold text-white mb-2">Direct Download (.dmg)</h3>
+            <p class="text-xs text-slate-400 leading-relaxed">
+              Standard macOS disk image. Download the DMG, drag <strong class="text-white">CherryPicker</strong> into your Applications folder, and press <span class="whitespace-nowrap font-medium text-white">⌥ Space</span>.
+            </p>
+          </div>
+
+          <div class="mt-6 pt-4 border-t border-white/[0.08]">
+            <a href="https://github.com/Wyroczen/CherryPicker/releases/latest" 
+               class="w-full py-2.5 px-4 rounded-xl bg-white text-black hover:bg-slate-100 font-semibold text-xs tracking-tight transition-all flex items-center justify-center gap-2 shadow-lg">
+              <span>Download Latest Release (.dmg)</span>
+              <span>↓</span>
+            </a>
+            <div class="text-[10px] text-slate-500 text-center mt-2 font-mono">
+              Signed build · Apple Silicon & Intel · macOS 13+
+            </div>
+          </div>
+        </div>
+
+        <!-- Option 2: Build from Source (SPM) -->
+        <div class="p-5 sm:p-6 rounded-3xl bg-black/60 border border-white/[0.10] flex flex-col justify-between font-mono text-xs shadow-xl backdrop-blur-xl">
+          <div>
+            <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/5 text-slate-400 border border-white/10 text-[11px] font-medium mb-4">
+              <span>❯_</span> Open Source
+            </div>
+            <h3 class="text-lg font-bold text-white mb-2 font-sans">Build from Source</h3>
+            <p class="text-xs text-slate-400 leading-relaxed font-sans">
+              Compile natively using Apple Swift Package Manager with zero external dependencies.
+            </p>
+
+            <div class="mt-4 p-3 rounded-xl bg-black/80 border border-white/10 text-[11px] text-slate-200 overflow-x-auto">
+              <div class="text-slate-500 text-[10px] select-none mb-1"># Clone & run via SPM:</div>
+              <div class="text-white flex items-center gap-1.5 whitespace-nowrap">
+                <span class="text-rose-500 select-none">$</span>
+                <span id="cmd-to-copy">git clone https://github.com/Wyroczen/CherryPicker.git && cd CherryPicker && swift run</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-6 pt-4 border-t border-white/[0.08]">
+            <button id="copy-btn" 
+                    class="w-full py-2.5 px-4 rounded-xl bg-white/10 hover:bg-white/15 text-white font-medium text-xs tracking-tight transition-all flex items-center justify-center gap-2 border border-white/10 font-sans">
+              <span id="copy-text">Copy Build Command</span>
+            </button>
+            <div class="text-[10px] text-slate-500 text-center mt-2 font-sans">
+              Requires Xcode Command Line Tools
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Subtle Non-Invasive FOSS Support Note -->
+      <div class="mt-8 pt-6 border-t border-white/[0.06] text-center text-xs text-slate-400 flex flex-wrap items-center justify-center gap-1.5 sm:gap-2">
+        <span>Free, offline, and open source under GNU GPL v3.</span>
+        <span class="hidden sm:inline text-slate-600">·</span>
+        <span>Finding it useful?</span>
+        <a href="https://paypal.me/wyroczen" target="_blank" rel="noopener noreferrer" 
+           class="inline-flex items-center gap-1 text-rose-400 hover:text-rose-300 font-medium transition-colors">
+          <span>Support development on PayPal</span>
+          <span class="text-rose-500 text-[11px]">♡</span>
+        </a>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Minimalist Footer -->
+  <footer class="max-w-5xl mx-auto px-4 py-12 border-t border-white/[0.06] text-xs text-slate-400 flex flex-col sm:flex-row items-center justify-between gap-4">
+    <div class="flex items-center gap-2">
+      <img src={`${base}/app-icon.png`} alt="CherryPicker" class="w-4 h-4 rounded-[3px]" />
+      <span class="text-white font-medium">CherryPicker</span>
+      <span class="text-slate-400">· Ultralight native launcher and window manager for macOS</span>
+    </div>
+    <div class="flex items-center gap-3 sm:gap-4 text-slate-400 flex-wrap justify-center">
+      <a href="https://github.com/Wyroczen/CherryPicker/releases" target="_blank" class="hover:text-white transition-colors">Releases</a>
+      <span>·</span>
+      <a href="https://github.com/Wyroczen/CherryPicker" target="_blank" class="hover:text-white transition-colors">GitHub</a>
+      <span>·</span>
+      <a href="https://paypal.me/wyroczen" target="_blank" rel="noopener noreferrer" class="hover:text-rose-400 transition-colors inline-flex items-center gap-1">
+        <span>Donate</span>
+        <span class="text-rose-500 text-[11px]">♡</span>
+      </a>
+      <span>·</span>
+      <span>GNU GPL v3</span>
+    </div>
+  </footer>
+
+  <script>
+    // Specular Highlight tracking
+    const hudCard = document.getElementById('hud-card');
+    const viewport = document.getElementById('desktop-viewport');
+
+    if (viewport && hudCard) {
+      viewport.addEventListener('mousemove', (e) => {
+        const rect = hudCard.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        hudCard.style.setProperty('--mouse-x', `${x}px`);
+        hudCard.style.setProperty('--mouse-y', `${y}px`);
+      });
+    }
+
+    // Automatic Ambient Wallpaper Carousel (Smooth Crossfade every 6 seconds)
+    const slides = [
+      { id: 'slide-0', label: 'Sonoma Hills' },
+      { id: 'slide-1', label: 'Big Sur Coast' },
+      { id: 'slide-2', label: 'Catalina Sunset' }
+    ];
+    let currentSlide = 0;
+    const wallpaperLabel = document.getElementById('wallpaper-label');
+
+    setInterval(() => {
+      currentSlide = (currentSlide + 1) % slides.length;
+      slides.forEach((slide, idx) => {
+        const el = document.getElementById(slide.id);
+        if (el) {
+          el.style.opacity = idx === currentSlide ? '1' : '0';
+        }
+      });
+      if (wallpaperLabel) {
+        wallpaperLabel.innerText = slides[currentSlide].label;
+      }
+    }, 6000);
+
+    // Initial Scroll Position: Scroll down slightly so items fade under top header AND above footer
+    const scrollContainer = document.getElementById('hud-scroll-container');
+    if (scrollContainer) {
+      // Sets scroll position to visibly showcase the soft gradient ramp at both top and bottom
+      scrollContainer.scrollTop = 48;
+    }
+
+    // Single Active Item Selection on Mouse Hover (Authentic macOS Spotlight/Raycast behavior)
+    const hudItems = document.querySelectorAll('.hud-item');
+    const footerKind = document.getElementById('footer-kind');
+    const footerTitle = document.getElementById('footer-title');
+
+    function activateItem(item: Element) {
+      hudItems.forEach(i => {
+        i.classList.remove('bg-white/[0.11]');
+        const badge = i.querySelector('.hud-badge');
+        if (badge) {
+          badge.className = 'hud-badge text-[9.5px] sm:text-[10px] font-semibold text-white/65 px-2 py-0.5 rounded-[6px] bg-white/[0.08] flex-shrink-0 ml-2';
+        }
+      });
+
+      item.classList.add('bg-white/[0.11]');
+      const badge = item.querySelector('.hud-badge');
+      if (badge) {
+        badge.className = 'hud-badge text-[9.5px] sm:text-[10px] font-semibold text-white/90 px-2 py-0.5 rounded-[6px] bg-white/[0.16] flex-shrink-0 ml-2';
+      }
+
+      if (footerKind && footerTitle) {
+        footerKind.innerText = (item as HTMLElement).dataset.kind || 'Command:';
+        footerTitle.innerText = (item as HTMLElement).dataset.action || '';
+      }
+    }
+
+    hudItems.forEach(item => {
+      // Hover immediately moves the active selection - exactly one row is highlighted at all times
+      item.addEventListener('mouseenter', () => activateItem(item));
+      item.addEventListener('click', () => activateItem(item));
+    });
+
+    // Live search filter
+    const searchInput = document.getElementById('search-input') as HTMLInputElement | null;
+    if (searchInput) {
+      searchInput.addEventListener('input', (e) => {
+        const q = (e.target as HTMLInputElement).value.toLowerCase().trim();
+        let firstVisible: Element | null = null;
+
+        hudItems.forEach(item => {
+          const text = (item as HTMLElement).innerText.toLowerCase();
+          if (text.includes(q)) {
+            (item as HTMLElement).style.display = 'flex';
+            if (!firstVisible) firstVisible = item;
+          } else {
+            (item as HTMLElement).style.display = 'none';
+          }
+        });
+
+        // Automatically select the first matching search result
+        if (firstVisible) {
+          activateItem(firstVisible);
+        }
+      });
+    }
+
+    // Copy command
+    const copyBtn = document.getElementById('copy-btn');
+    const cmdToCopy = document.getElementById('cmd-to-copy');
+    const copyText = document.getElementById('copy-text');
+
+    copyBtn?.addEventListener('click', () => {
+      if (cmdToCopy && copyText) {
+        navigator.clipboard.writeText(cmdToCopy.innerText).then(() => {
+          copyText.innerText = 'Copied to Clipboard!';
+          setTimeout(() => {
+            copyText.innerText = 'Copy Build Command';
+          }, 2000);
+        });
+      }
+    });
+  </script>
+</Layout>
