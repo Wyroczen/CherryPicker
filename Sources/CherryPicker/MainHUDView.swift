@@ -80,7 +80,7 @@ public struct MainHUDView: View {
                 .font(.system(size: 19, weight: .medium))
                 .foregroundColor(.white.opacity(0.55))
 
-            TextField("Szukaj aplikacji, plików lub poleceń okien...", text: $searchText)
+            TextField("Search applications, files, or commands...", text: $searchText)
                 .focused($isSearchFocused)
                 .textFieldStyle(.plain)
                 .font(.system(size: 17, weight: .regular))
@@ -207,7 +207,7 @@ public struct MainHUDView: View {
                         .lineLimit(1)
                 }
             } else {
-                Text("Brak wyników")
+                Text("No results")
                     .font(.system(size: 11))
                     .foregroundColor(.white.opacity(0.45))
             }
@@ -228,7 +228,7 @@ public struct MainHUDView: View {
                             .stroke(Color.white.opacity(0.14), lineWidth: 0.5)
                     )
 
-                Text("Wykonaj")
+                Text("Open")
                     .font(.system(size: 11, weight: .medium))
                     .foregroundColor(.white.opacity(0.6))
             }
@@ -260,9 +260,9 @@ public struct MainHUDView: View {
 
     private func actionDescription(for kind: SearchItemKind) -> String {
         switch kind {
-        case .windowCommand: return "Zastosuj układ:"
-        case .application: return "Uruchom aplikację:"
-        case .file: return "Otwórz plik:"
+        case .windowCommand: return "Command:"
+        case .application: return "Open application:"
+        case .file: return "Open file:"
         }
     }
 

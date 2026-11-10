@@ -9,9 +9,9 @@ public enum SearchItemKind: Hashable, Sendable {
 
     public var badgeText: String {
         switch self {
-        case .application: return "Aplikacja"
-        case .file: return "Plik"
-        case .windowCommand: return "Polecenie"
+        case .application: return "Application"
+        case .file: return "File"
+        case .windowCommand: return "Command"
         }
     }
 }
@@ -62,7 +62,7 @@ public struct SearchItem: Identifiable, Hashable, Sendable {
             title: name,
             subtitle: path,
             kind: .application(path: path),
-            keywords: [name.lowercased(), "app", "aplikacja"],
+            keywords: [name.lowercased(), "app", "application"],
             lastUsedDate: lastUsed
         )
     }
@@ -74,7 +74,7 @@ public struct SearchItem: Identifiable, Hashable, Sendable {
             title: name,
             subtitle: path,
             kind: .file(path: path),
-            keywords: [name.lowercased(), "plik", "file"],
+            keywords: [name.lowercased(), "file"],
             lastUsedDate: lastUsed
         )
     }

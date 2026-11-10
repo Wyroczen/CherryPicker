@@ -19,19 +19,19 @@ final class AppMain: NSObject, NSApplicationDelegate {
     }
 
     func applicationDidFinishLaunching(_ notification: Notification) {
-        print("=== CherryPicker Uruchomiony ===")
+        print("=== CherryPicker Started ===")
         // Start śledzenia aktywnej aplikacji
         _ = FrontmostAppTracker.shared
 
-        print("1. Sprawdzanie uprawnień Dostępności (Accessibility)...")
+        print("1. Checking Accessibility permissions...")
         let trusted = WindowManager.shared.isAccessibilityGranted(prompt: true)
         if !trusted {
-            print("Wymagane uprawnienia Dostępności: Ustawienia systemowe -> Prywatność i bezpieczeństwo -> Dostępność")
+            print("Accessibility permissions required: System Settings -> Privacy & Security -> Accessibility")
         } else {
-            print("Uprawnienia Dostępności są aktywne.")
+            print("Accessibility permissions are active.")
         }
 
-        print("2. Inicjalizacja okna HUD...")
+        print("2. Initializing HUD panel...")
         let panel = FloatingHUDPanel(contentRect: NSRect(x: 0, y: 0, width: 700, height: 460))
         let contentView = MainHUDView { [weak panel] in
             panel?.hideHUD(restoreFocus: true)
@@ -45,7 +45,7 @@ final class AppMain: NSObject, NSApplicationDelegate {
         panel.center()
         self.hudPanel = panel
 
-        print("3. Rejestracja globalnego skrótu (Option + Space)...")
+        print("3. Registering global hotkey (Option + Space)...")
         registerGlobalHotKey()
 
         // Pokazanie panelu po starcie aplikacji
@@ -95,9 +95,9 @@ final class AppMain: NSObject, NSApplicationDelegate {
                 nil,
                 nil
             )
-            print("Zarejestrowano skrót globalny: Option + Spacja (⌥ + Space)")
+            print("Registered global hotkey: Option + Space (⌥ + Space)")
         } else {
-            print("Błąd rejestracji skrótu: \(status)")
+            print("Error registering global hotkey: \(status)")
         }
     }
 }

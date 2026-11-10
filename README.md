@@ -1,79 +1,79 @@
 # CherryPicker 🍒
 
-Ultralekki, natywny launcher aplikacji i menedżer okien dla systemu macOS, napisany w **czystym Swift / SwiftUI / AppKit** bez żadnych zewnętrznych zależności.
+An ultralight, native application launcher and window manager for macOS, built with **pure Swift / SwiftUI / AppKit** without any external dependencies.
 
 ---
 
-## Funkcjonalności
+## Features
 
-### 1. Nowoczesny Wygląd Liquid Glass & Architektura Pływającego Szkła
-- **Materiały szklane macOS (Liquid Glass)**: Półprzezroczyste tło `NSVisualEffectView` z miękkim gradientem zwierciadlanym (specular highlight) o grubości 1px.
-- **Organiczne zaokrąglenia**: Łagodne krawędzie głównego panelu HUD z promieniem 26px (`continuous style`).
-- **Pływające szkło o wysokiej gęstości (Full-Bleed Floating Glass)**: Lista wyników rozciąga się pod spodem na pełną wysokość okna, eliminując jakiekolwiek sztuczne linie podziału czy pasy na środku okna.
-- **Łagodna rampa krycia (Soft Entry Ramp)**:
-  - W strefie wpisywania tekstu obowiązuje pełne 90% krycia i głębokie rozmycie, dzięki czemu tekst wyszukiwarki jest w 100% czytelny, a przewijane wiersze stają się niewidoczne w tle.
-  - Pomiędzy polem tekstowym a listą zastosowano łagodną rampę (płynny wzrost krycia z 0% do 90%), dzięki czemu elementy miękko wsuwają się pod nagłówek bez nagłego skoku optycznego.
-- **Subtelny pasek akcji**: Dyskretna pływająca stopka ze statusem bieżącego zaznaczenia oraz czytelnym keycapem `↵ Wykonaj`.
+### 1. Liquid Glass Aesthetic & Floating Architecture
+- **macOS Liquid Glass Materials**: Translucent `NSVisualEffectView` background with a subtle 1px specular highlight gradient.
+- **Organic Curvature**: Smooth edges on the main HUD panel with a 26px continuous squircle corner radius.
+- **Full-Bleed Floating Glass Layout**: The search results list spans the full window height beneath floating translucent headers and footers, eliminating artificial divider lines.
+- **Soft Entry Ramp**:
+  - In the input field zone, a high-opacity blur ensures 100% search text legibility while content scrolling underneath fades out smoothly.
+  - A gentle opacity ramp between the text field and list ensures items glide smoothly under the header.
+- **Minimalist Action Bar**: A discreet floating glass footer showing current selection details and an interactive `↵ Open` keycap.
 
-### 2. Dynamiczne Ikony Podglądu Okna (Window Preview Icons)
-- Zamiast statycznych, niedokładnych symboli, każde polecenie zmiany geometrii posiada dedykowaną, wektorową miniaturę monitora (`WindowPreviewIcon`):
-  - Błękitny gradient ekranu macOS (`#38bdf8` -> `#2563eb`).
-  - Ciemna matryca z precyzyjnie wyliczonym białym oknem, odpowiadającym rzeczywistemu ułamkowi i położeniu na ekranie (`0.0 ... 1.0`).
-  - Pełne odwzorowanie dla wszystkich 47 dostępnych układów.
+### 2. Dynamic Window Preview Icons
+- Every window management action features a vector preview monitor tile (`WindowPreviewIcon`):
+  - macOS accent gradient background (`#38bdf8` -> `#2563eb`).
+  - Dark display matrix displaying an accurately positioned white window box corresponding to the exact screen coordinate fraction (`0.0 ... 1.0`).
+  - Available across all 47 window geometries.
 
-### 3. Zarządzanie Oknami (Window Management)
-- Natychmiastowe skalowanie i przesuwanie aktywnego okna z obsługą ponad 40 geometrii:
-  - **Połówki**: Lewa (`Left Half`), Prawa (`Right Half`), Górna (`Top Half`), Dolna (`Bottom Half`), Środkowa (`Center Half`).
-  - **Jedna trzecia (1/3)**: `First Third`, `Center Third`, `Last Third`, `Top Third`, `Middle Third`, `Bottom Third`.
-  - **Dwie trzecie (2/3)**: `First Two Thirds`, `Center Two Thirds`, `Last Two Thirds`, `Top Two Thirds`, `Bottom Two Thirds`, `Top/Bottom Center Two Thirds`.
-  - **Ćwiartki i Trzy czwarte (1/4 & 3/4)**: 4 narożne ćwiartki, 4 pionowe kolumny, 4 poziome pasy oraz układy 75% szerokości/wysokości.
-  - **Szóstki (1/6)**: Siatka 3 kolumny x 2 rzędy (`Top/Bottom Left, Center, Right Sixth`).
-  - **Maksymalizacja i Skalowanie**: `Maximize` (100%), `Almost Maximize` (90%), `Maximize Height`, `Maximize Width`, `Reasonable Size` (60%, max 1024x900) oraz `Center`.
-- **Obejście dla aplikacji Electron/Chromium**: Automatyczne tymczasowe wyłączanie `AXEnhancedUserInterface`, zapobiegające zamrażaniu manipulacji oknem w aplikacjach takich jak Slack, Discord czy VS Code.
-- **Odwrócenie osi współrzędnych**: Dokładna konwersja ramki roboczej z Cocoa (`NSScreen.visibleFrame`, punkt (0,0) na dole) do układu Accessibility (punkt (0,0) na górze), omijając pasek menu i Dock.
-- **Sekwencja trójkroku**: Zastosowanie `Pozycja -> Rozmiar -> Pozycja` eliminuje błędy blokowania geometrii przez WindowServer na krawędziach wyświetlacza.
+### 3. Native Window Management
+- Instant resizing and positioning of the active application window supporting over 40 geometries:
+  - **Halves**: `Left Half`, `Right Half`, `Top Half`, `Bottom Half`, `Center Half`.
+  - **Thirds (1/3)**: `First Third`, `Center Third`, `Last Third`, `Top Third`, `Middle Third`, `Bottom Third`.
+  - **Two Thirds (2/3)**: `First Two Thirds`, `Center Two Thirds`, `Last Two Thirds`, `Top Two Thirds`, `Bottom Two Thirds`, `Top/Bottom Center Two Thirds`.
+  - **Quarters & Fourths (1/4 & 3/4)**: Corner quarters, vertical columns, horizontal bands, and 75% width/height layouts.
+  - **Sixths (1/6)**: 3-column x 2-row grid (`Top/Bottom Left, Center, Right Sixth`).
+  - **Maximize & Sizing**: `Maximize` (100%), `Almost Maximize` (90%), `Maximize Height`, `Maximize Width`, `Reasonable Size` (60%, max 1024x900), and `Center`.
+- **Electron / Chromium Workaround**: Automatically disables `AXEnhancedUserInterface` temporarily during window positioning, preventing window resizing freezes in apps like Slack, Discord, and VS Code.
+- **Coordinate Space Translation**: Precision conversion between Cocoa screen coordinates (`NSScreen.visibleFrame`, bottom-left origin) and Accessibility coordinates (top-left origin), respecting menu bar and Dock margins.
+- **Three-Step Sequence**: Applies `Position -> Size -> Position` order to bypass WindowServer edge-snapping geometry restrictions.
 
-### 4. Zunifikowana Wyszukiwarka (Spotlight & Polecenia)
-- **Polecenia okien w głównej liście**: Sterowanie oknami jest pełnoprawnym elementem listy wyszukiwania (oznaczonym etykietą `Polecenie`).
-- Wyszukiwanie z obsługą polskich i angielskich aliasów (np. *"lewo"*, *"left"*, *"trzecia"*, *"third"*, *"max"*, *"ćwiartka"*).
-- **Podsystem zapytań CoreServices `MDQuery`**: Wywołanie synchroniczne `MDQueryCreate` z predykatem `kMDItemContentTypeTree == 'com.apple.application-bundle'`.
-- Błyskawiczny czas odpowiedzi (~2-5 ms) zamiast wolnego przeszukiwania dysku przez `FileManager`.
-- Filtrowanie katalogu `/System/Library/` (eliminacja zbędnych procesów pomocniczych macOS).
-- Sortowanie według daty ostatniego otwarcia (`kMDItemLastUsedDate` / MRU).
-- Wyszukiwanie plików systemowych w czasie rzeczywistym w tle.
+### 4. Unified Search (Spotlight & Commands)
+- **Window Commands in Search Results**: Window management actions appear directly in the search results list (labeled `Command`).
+- Rich search alias matching (e.g. *"left"*, *"half"*, *"third"*, *"max"*, *"quarter"*).
+- **CoreServices `MDQuery` Subsystem**: Synchronous `MDQueryCreate` query using predicate `kMDItemContentTypeTree == 'com.apple.application-bundle'`.
+- Instant indexing (~2–5 ms response time) avoiding slow filesystem scanning.
+- Filters out internal `/System/Library/` helper daemons.
+- Sorted by Most Recently Used (`kMDItemLastUsedDate` / MRU).
+- Asynchronous real-time file searching in the background.
 
-### 5. Pływający Panel HUD
-- Działa jako proces pomocniczy (`.accessory` / odpowiednik `LSUIElement = true`) – brak ikony w Docku i `Cmd+Tab`.
-- Klasa `NSPanel` z `.nonactivatingPanel`, `level = .floating` oraz `.canJoinAllSpaces, .fullScreenAuxiliary`.
-- **Śledzenie historii aktywacji (`FrontmostAppTracker`)**: Inteligentne przywracanie fokusu do właściwej docelowej aplikacji przed zmianą geometrii okna.
-- Globalny skrót: **`Option + Spacja`** (`⌥ + Space`) rejestrowany przez Carbon `RegisterEventHotKey`.
-- **Nawigacja strzałkami**: Klawisze `↑` / `↓` płynnie przewijają listę wyników, `Enter` wykonuje akcję, a `ESC` zamyka HUD.
+### 5. Floating HUD Panel
+- Runs as an accessory process (`.accessory` / `LSUIElement = true`) – no clutter in the Dock or `Cmd+Tab` switcher.
+- Configured via `NSPanel` with `.nonactivatingPanel`, `level = .floating`, and `.canJoinAllSpaces, .fullScreenAuxiliary`.
+- **Focus History Tracking (`FrontmostAppTracker`)**: Seamlessly preserves and restores active target application focus before applying window actions.
+- Global Hotkey: **`Option + Space`** (`⌥ + Space`) registered via Carbon `RegisterEventHotKey`.
+- **Keyboard Navigation**: `↑` / `↓` keys navigate results smoothly, `Enter` executes the selection, and `ESC` dismisses the HUD.
 
 ---
 
-## Wymagania
+## Requirements
 
-- macOS 13.0 (Ventura) lub nowszy
+- macOS 13.0 (Ventura) or later
 - Swift 5.9+ / Swift 6+
-- Uprawnienia **Dostępności** (Accessibility) w systemie macOS
+- **Accessibility** permissions in macOS
 
 ---
 
-## Uruchomienie
+## Getting Started
 
-1. Sklonuj repozytorium i przejdź do katalogu projektu:
+1. Clone the repository and navigate into the project directory:
    ```bash
    git clone https://github.com/Wyroczen/CherryPicker.git
    cd CherryPicker
    ```
 
-2. Zbuduj i uruchom aplikację:
+2. Build and run the app:
    ```bash
    swift run
    ```
 
-3. Przy pierwszym uruchomieniu nadaj uprawnienia **Dostępności**:
-   - `Ustawienia systemowe -> Prywatność i bezpieczeństwo -> Dostępność`.
-   - Zezwól na dostęp dla aplikacji lub Twojego terminala.
+3. On first launch, grant **Accessibility** permissions:
+   - Go to `System Settings -> Privacy & Security -> Accessibility`.
+   - Enable access for CherryPicker (or your Terminal if running via `swift run`).
 
-4. Wciśnij **`Option + Spacja`**, aby wywołać HUD.
+4. Press **`Option + Space`** (`⌥ + Space`) to bring up the HUD.

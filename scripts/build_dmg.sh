@@ -11,16 +11,16 @@ PROJECT_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
 
 cd "${PROJECT_ROOT}"
 
-echo "=== [1/5] Kompilacja binarki Release (${ARCH}) ==="
+echo "=== [1/5] Compiling Release binary (${ARCH}) ==="
 swift build -c release --arch "${ARCH}"
 
 BIN_PATH=".build/${ARCH}-apple-macosx/release/${APP_NAME}"
 if [ ! -f "${BIN_PATH}" ]; then
-    echo "Błąd: Nie znaleziono skompilowanej binarki w ${BIN_PATH}"
+    echo "Error: Compiled binary not found at ${BIN_PATH}"
     exit 1
 fi
 
-echo "=== [2/5] Składanie struktury ${APP_NAME}.app ==="
+echo "=== [2/5] Assembling ${APP_NAME}.app bundle structure ==="
 APP_BUNDLE="${APP_NAME}.app"
 rm -rf "${APP_BUNDLE}"
 mkdir -p "${APP_BUNDLE}/Contents/MacOS"
@@ -33,13 +33,13 @@ chmod +x "${APP_BUNDLE}/Contents/MacOS/${APP_NAME}"
 if [ -f "Info.plist" ]; then
     sed -E "s/<string>1.0.0<\/string>/<string>${VERSION}<\/string>/g" Info.plist > "${APP_BUNDLE}/Contents/Info.plist"
 else
-    echo "Brak pliku Info.plist w katalogu głównym!"
+    echo "Info.plist file missing in project root!"
     exit 1
 fi
 
 # Kompilacja katalogu zasobów (Asset Catalog) dla natywnego wsparcia ikon macOS
 if command -v xcrun >/dev/null 2>&1 && xcrun --find actool >/dev/null 2>&1 && [ -d "Assets.xcassets" ]; then
-    echo "Kompilacja Assets.xcassets za pomocą actool..."
+    echo "Compiling Assets.xcassets using actool..."
     xcrun actool Assets.xcassets \
         --compile "${APP_BUNDLE}/Contents/Resources" \
         --platform macosx \
@@ -58,7 +58,7 @@ if [ -f "AppIcon.icns" ] && [ ! -f "${APP_BUNDLE}/Contents/Resources/AppIcon.icn
     cp AppIcon.icns "${APP_BUNDLE}/Contents/Resources/"
 fi
 
-echo "=== [3/5] Podpisywanie aplikacji ==="
+echo "=== [3/5] Code signing application ==="
 # Sprawdzenie dostępnych certyfikatów w Pęku kluczy (np. Apple Development)
 SIGN_IDENTITY=$(security find-identity -p codesigning -v 2>/dev/null | grep -E "Apple Development" | head -n 1 | awk -F '"' '{print $2}' || true)
 if [ -z "${SIGN_IDENTITY}" ]; then
@@ -66,14 +66,14 @@ if [ -z "${SIGN_IDENTITY}" ]; then
 fi
 
 if [ -n "${SIGN_IDENTITY}" ]; then
-    echo "Użyto certyfikatu tożsamości: ${SIGN_IDENTITY}"
+    echo "Using signing identity: ${SIGN_IDENTITY}"
     codesign --force --deep -s "${SIGN_IDENTITY}" "${APP_BUNDLE}"
 else
-    echo "Brak certyfikatu deweloperskiego w Pęku kluczy. Podpisywanie ze stałym Designated Requirement..."
+    echo "No Developer certificate found in Keychain. Signing with designated requirement..."
     codesign --force --deep -s - -r='designated => identifier "com.wyroczen.CherryPicker"' "${APP_BUNDLE}"
 fi
 
-echo "=== [4/5] Przygotowanie zawartości DMG ==="
+echo "=== [4/5] Staging DMG contents ==="
 DMG_STAGING="dmg_staging"
 rm -rf "${DMG_STAGING}"
 mkdir -p "${DMG_STAGING}"
@@ -82,7 +82,7 @@ cp -R "${APP_BUNDLE}" "${DMG_STAGING}/"
 # Utworzenie symlinka do katalogu /Applications
 ln -s /Applications "${DMG_STAGING}/Applications"
 
-echo "=== [5/5] Tworzenie obrazu DMG ==="
+echo "=== [5/5] Creating DMG disk image ==="
 if [ -n "${CUSTOM_DMG_NAME}" ]; then
     DMG_NAME="${CUSTOM_DMG_NAME}"
 else
@@ -96,4 +96,4 @@ hdiutil create -volname "${APP_NAME}" \
                "${DMG_NAME}"
 
 rm -rf "${DMG_STAGING}"
-echo "=== Sukces! Utworzono plik: ${DMG_NAME} ==="
+echo "=== Success! Generated: ${DMG_NAME} ==="

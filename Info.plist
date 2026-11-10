@@ -28,6 +28,8 @@
     <key>NSHighResolutionCapable</key>
     <true/>
     <key>NSAppleEventsUsageDescription</key>
-    <string>CherryPicker wymaga dostępu do zdarzeń systemowych w celu zarządzania oknami aplikacji.</string>
+    <string>CherryPicker requires access to system events to manage application windows.</string>
+    <key>NSAccessibilityUsageDescription</key>
+    <string>CherryPicker requires Accessibility permissions to resize and arrange application windows.</string>
 </dict>
 </plist>
